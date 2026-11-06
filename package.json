@@ -1,0 +1,43 @@
+{
+  "name": "aetheriarpg-launcher",
+  "productName": "AetheriaRPG Launcher",
+  "version": "1.0.0",
+  "description": "Launcher oficial de AetheriaRPG para Minecraft Java 1.21.1",
+  "main": "src/main/main.js",
+  "author": "AetheriaRPG",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "check": "node tools/check-syntax.js",
+    "icon": "node tools/make-icon.js",
+    "validate-pack": "node tools/validate-pack.js",
+    "build-manifest": "node tools/build-manifest.js",
+    "dist": "node tools/make-icon.js && electron-builder --win nsis --x64 --publish never"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.aetheriarpg.launcher",
+    "productName": "AetheriaRPG Launcher",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["src/**/*", "config/**/*", "build/icon.png", "package.json"],
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "build/icon.png" },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AetheriaRPG Launcher",
+      "language": "3082"
+    },
+    "publish": { "provider": "github", "owner": "aetheria908-cmd", "repo": "launcher1.21.1", "releaseType": "release" }
+  }
+}

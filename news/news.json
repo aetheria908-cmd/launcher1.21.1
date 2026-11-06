@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "bienvenida",
+      "type": "anuncio",
+      "title": "Bienvenido al launcher de AetheriaRPG",
+      "date": "2026-11-05",
+      "summary": "Tu launcher oficial: abre, inicia sesión y pulsa JUGAR. Los Texture Packs y las novedades se actualizan solos.",
+      "body": "Este es el launcher oficial de AetheriaRPG para Minecraft Java 1.21.1.\n\nLos Texture Packs obligatorios se descargan y se actualizan automáticamente; no tienes que instalar nada a mano.\n\nÚnete a la comunidad en Discord para enterarte de todas las novedades.",
+      "image": "",
+      "url": "https://discord.gg/B8PhTZ2ks",
+      "pinned": true
+    }
+  ]
+}
