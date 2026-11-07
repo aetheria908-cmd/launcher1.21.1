@@ -1,0 +1,36 @@
+# Compila el instalador de Windows y lo publica en GitHub Releases (el actualizador del launcher lo detecta solo).
+# Uso: Actions → "Publicar launcher" → Run workflow. Sube antes la versión en package.json.
+# Packs privados: crea el secreto PACK_KEY (Settings → Secrets and variables → Actions) con la clave de cifrado.
+name: Publicar launcher
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: 22 }
+      - run: npm install
+      - run: npm test
+      - name: Inyectar la clave de los packs privados
+        shell: bash
+        env:
+          PACK_KEY: ${{ secrets.PACK_KEY }}
+        run: |
+          if grep -q '"encrypted": true' manifest/manifest.json && [ -z "$PACK_KEY" ]; then
+            echo "::error::Hay packs privados pero falta el secreto PACK_KEY (Settings > Secrets and variables > Actions)"; exit 1
+          fi
+          if [ -n "$PACK_KEY" ]; then
+            node -e "require('fs').writeFileSync('config/secrets.json', JSON.stringify({ packKey: process.env.PACK_KEY }))"
+            npx electron-builder --win --x64 --dir --publish never
+            npx --yes @electron/asar list dist/win-unpacked/resources/app.asar | grep -q "config.secrets.json" || { echo "::error::La clave no quedó empaquetada en el launcher"; exit 1; }
+            echo "Clave de packs empaquetada correctamente"
+          fi
+      - run: npx electron-builder --win nsis --x64 --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
