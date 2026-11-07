@@ -1,4 +1,7 @@
 'use strict';
+// Estas pruebas usan un "java" falso (un script de shell), que Windows no puede ejecutar: solo corren en Linux/macOS
+// (el flujo "Pruebas" en Ubuntu las ejecuta). En Windows se omiten sin afectar al launcher real.
+if (process.platform === 'win32') { console.log('# pipeline.test.js omitido en Windows (java falso = script de shell)'); return; }
 // Flujo completo de JUGAR con un "Mojang" y un "GitHub" falsos y un electron simulado.
 const test = require('node:test');
 const { beforeEach } = require('node:test');
