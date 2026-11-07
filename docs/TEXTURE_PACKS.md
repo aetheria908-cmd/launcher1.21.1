@@ -1,5 +1,7 @@
 # Administrar Texture Packs
 
+> Para packs **privados (cifrados)** o que **requieren OptiFine**, mira [PACKS_PRIVADOS.md](PACKS_PRIVADOS.md).
+
 Estructura:
 ```
 resources/resourcepacks/required/   ← obligatorios (se instalan y actualizan solos para todos)

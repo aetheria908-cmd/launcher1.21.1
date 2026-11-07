@@ -39,24 +39,39 @@ function entry(abs, rel, extra = {}) {
 }
 
 const packs = [];
+const today = new Date().toISOString().slice(0, 10);
 for (const cat of ['required', 'optional']) {
   const dir = path.join(ROOT, 'resources', 'resourcepacks', cat);
-  for (const name of list(dir, ['.zip'])) {
-    const abs = path.join(dir, name);
-    const insp = inspectPack(abs);
-    for (const w of insp.warnings) console.warn(`AVISO ${name}: ${w}`);
-    if (!insp.ok) { errors.push(`${name}: pack inválido → ${insp.errors.join(' | ')}`); continue; }
-    const e = entry(abs, `resources/resourcepacks/${cat}/${name}`, { category: cat });
-    if (!e) continue;
+  const files = list(dir, ['.zip', '.aep']);
+  // Fichas de packs privados alojados fuera del repositorio (GitHub Release): NombrePack.aep.json sin el .aep al lado
+  for (const n of list(dir, ['.json'])) if (/\.aep\.json$/i.test(n) && !files.includes(n.replace(/\.json$/i, ''))) { if (meta(path.join(dir, n.replace(/\.json$/i, ''))).external) files.push(n.replace(/\.json$/i, '')); }
+  for (const name of files.sort()) {
+    const abs = path.join(dir, name), m = meta(abs), isAep = /\.aep$/i.test(name);
+    let e;
+    if (isAep) {
+      if (!m.encrypted || !m.packFile || !m.plainSha256) { errors.push(`${name}: falta su ficha ${name}.json (créala con tools/encrypt-pack.js)`); continue; }
+      if (m.external) {
+        if (!/^https:\/\//.test(m.url || '') || !m.sha256 || !m.size) { errors.push(`${name}.json: un pack externo necesita url (https), sha256 y size`); continue; }
+        e = { id: m.id || slug(name), name: m.name || name.replace(/\.[^.]+$/, ''), description: m.description || '', file: name, url: m.url, sha256: m.sha256, size: m.size };
+      } else { e = entry(abs, `resources/resourcepacks/${cat}/${name}`); if (!e) continue; }
+      Object.assign(e, { category: cat, encrypted: true, packFile: m.packFile, plainSha256: m.plainSha256, requiresOptifine: !!m.requiresOptifine, packFormat: m.packFormat, _meta: m });
+    } else {
+      const insp = inspectPack(abs);
+      for (const w of insp.warnings) console.warn(`AVISO ${name}: ${w}`);
+      if (!insp.ok) { errors.push(`${name}: pack inválido → ${insp.errors.join(' | ')}`); continue; }
+      if (insp.info.usesOptifine && m.requiresOptifine === undefined) console.warn(`AVISO ${name}: usa funciones de OptiFine. Si solo debe cargarse con OptiFine, añade {"requiresOptifine": true} en ${name}.json`);
+      e = entry(abs, `resources/resourcepacks/${cat}/${name}`, { category: cat });
+      if (!e) continue;
+      Object.assign(e, { requiresOptifine: !!m.requiresOptifine, packFormat: insp.info.packFormat });
+    }
     const old = (prev.resourcepacks || []).find((p) => p.id === e.id);
-    const changed = !old || old.sha256 !== e.sha256;
-    const today = new Date().toISOString().slice(0, 10);
+    const fp = (x) => (x.plainSha256 || x.sha256);
+    const changed = !old || fp(old) !== fp(e);
     e.version = e._meta.version || (!old ? '1.0.0' : changed ? bump(old.version) : old.version);
     e.updatedAt = changed ? today : old.updatedAt;
     e.priority = Number.isFinite(e._meta.priority) ? e._meta.priority : (old && old.priority) || 0;
-    e.packFormat = insp.info.packFormat;
     e.history = [...((old && old.history) || [])];
-    if (changed) e.history.push({ version: e.version, sha256: e.sha256, date: today });
+    if (changed) e.history.push({ version: e.version, sha256: fp(e), date: today });
     delete e._meta; packs.push(e);
   }
 }
@@ -72,7 +87,7 @@ for (const [kind, exts] of Object.entries(kinds)) {
   }
 }
 
-const out = { schemaVersion: 1, generatedAt: '', server: base.server, urls: base.urls, newsUrl: base.newsUrl, maintenance: base.maintenance, launcher: base.launcher, settings: base.settings, resourcepacks: packs, media };
+const out = { schemaVersion: 1, generatedAt: '', server: base.server, urls: base.urls, newsUrl: base.newsUrl, auth: base.auth || {}, maintenance: base.maintenance, launcher: base.launcher, settings: base.settings, resourcepacks: packs, media };
 const v = validateManifest(out, '999.0.0');
 if (!v.ok) errors.push(...v.errors);
 const ids = new Set();
