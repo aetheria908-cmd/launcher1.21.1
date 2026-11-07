@@ -7,8 +7,9 @@ const { hashFile, safeJoin, evalRules } = require('./util');
 const { ensureFiles } = require('./files');
 const log = require('./logger');
 
-const VERSION_MANIFEST = 'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json';
-const ASSET_HOST = 'https://resources.download.minecraft.net';
+// Las variables AETHERIA_TEST_* existen solo para las pruebas automáticas.
+const VERSION_MANIFEST = process.env.AETHERIA_TEST_VERSION_MANIFEST || 'https://piston-meta.mojang.com/mc/game/version_manifest_v2.json';
+const ASSET_HOST = process.env.AETHERIA_TEST_ASSET_HOST || 'https://resources.download.minecraft.net';
 
 async function getVersionJson(id, gameDir, signal) {
   const vfile = safeJoin(path.join(gameDir, 'versions'), id, id + '.json');

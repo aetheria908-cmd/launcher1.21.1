@@ -52,6 +52,7 @@ function inspectPack(file, target = TARGET_FORMAT) {
   const ns = new Set();
   for (const f of files) { const m = /^assets\/([^/]+)\//.exec(f.name); if (m) ns.add(m[1]); }
   r.info.namespaces = [...ns];
+  r.info.usesOptifine = files.some((f) => /^assets\/[^/]+\/optifine\//.test(f.name));
   r.info.hasIcon = entries.some((e) => e.name === 'pack.png');
   if (!ns.size) r.errors.push('El pack no contiene ninguna carpeta assets/<namespace>/.');
   r.ok = r.errors.length === 0;

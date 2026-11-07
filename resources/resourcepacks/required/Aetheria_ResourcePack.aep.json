@@ -1,0 +1,12 @@
+{
+  "id": "aetheria",
+  "name": "Aetheria",
+  "description": "Intro, decoración medieval y moneda",
+  "encrypted": true,
+  "packFile": "Aetheria_ResourcePack.zip",
+  "plainSha256": "a1a9636627f1f561f7e70c7475ac9ee7313a4b1a91b6cd2f752858d3240ff461",
+  "plainSize": 2694966,
+  "packFormat": 34,
+  "requiresOptifine": false,
+  "priority": 0
+}

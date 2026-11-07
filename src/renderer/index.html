@@ -2,86 +2,90 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: file:; media-src file:; connect-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: file:; media-src file: blob:; connect-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Launcher</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 011 1v10a1 1 0 01-1 1h-8l-5 4v-4H4a1 1 0 01-1-1V6a1 1 0 011-1z"/><path d="M8.5 11h.01M15.5 11h.01" stroke-width="2.6"/></symbol>
+  <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M6 4h11a2 2 0 012 2v13a1 1 0 01-1 1H8a2 2 0 01-2-2z"/><path d="M9 8h7M9 12h7M9 16h4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.2" stroke-width="2.2"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14" stroke-width="2.6"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 8h12l-3-3M17 16H5l3 3"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5H5V6h5"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 002 3h10a2 2 0 002-3l-5-9V3"/><path d="M8 15h8"/></symbol>
+  <symbol id="i-min" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-max" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V6M6 11l6-6 6 6"/></symbol>
+</defs></svg>
+
 <div id="bg" aria-hidden="true">
-  <svg id="castle" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMax slice">
-    <defs>
-      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#120a22"/><stop offset=".55" stop-color="#2b1749"/><stop offset="1" stop-color="#6a3a28"/></linearGradient>
-      <radialGradient id="moon"><stop offset="0" stop-color="#f3e4b8" stop-opacity=".75"/><stop offset="1" stop-color="#f3e4b8" stop-opacity="0"/></radialGradient>
-    </defs>
-    <rect width="1200" height="520" fill="url(#sky)"/>
-    <circle cx="930" cy="130" r="130" fill="url(#moon)"/><circle cx="930" cy="130" r="32" fill="#f1e2b6"/>
-    <g fill="#f1e2b6" opacity=".7"><circle cx="120" cy="70" r="1.6"/><circle cx="260" cy="130" r="1.2"/><circle cx="410" cy="55" r="1.8"/><circle cx="640" cy="90" r="1.3"/><circle cx="760" cy="40" r="1.5"/><circle cx="1090" cy="85" r="1.7"/><circle cx="1150" cy="190" r="1.2"/><circle cx="60" cy="210" r="1.4"/></g>
-    <path d="M0 520V390L90 330l70 50 110-80 90 70 90-40 120 70 120-60 110 50 130-70 110 60 90-40 120 80v200z" fill="#1d1233"/>
-    <g fill="#0c0912">
-      <path d="M0 520V450c120-30 200-20 300 0s180 10 260-10l60 10 60-10c80 20 160 10 260 10s220-20 280 0v80z"/>
-      <rect x="520" y="250" width="160" height="270"/><path d="M520 250v-22h20v12h20v-12h20v12h20v-12h20v12h20v-12h20v12h20v-12h20v22z"/>
-      <rect x="430" y="300" width="62" height="220"/><polygon points="424,300 461,222 498,300"/>
-      <rect x="708" y="290" width="62" height="230"/><polygon points="702,290 739,206 776,290"/>
-      <rect x="300" y="380" width="130" height="140"/><path d="M300 380v-14h14v8h14v-8h14v8h14v-8h14v8h14v-8h14v14z"/>
-      <rect x="770" y="395" width="150" height="125"/><path d="M770 395v-14h14v8h14v-8h14v8h14v-8h14v8h14v-8h14v8h14v-8h14v14z"/>
-      <rect x="585" y="170" width="30" height="82"/><polygon points="578,170 600,104 622,170"/>
-      <rect x="248" y="340" width="52" height="180"/><polygon points="244,340 274,282 304,340"/>
-    </g>
-    <g fill="#f0b256" opacity=".9"><rect x="594" y="285" width="12" height="22" rx="6"/><rect x="556" y="330" width="9" height="18" rx="4"/><rect x="635" y="330" width="9" height="18" rx="4"/><rect x="455" y="340" width="9" height="16" rx="4"/><rect x="733" y="335" width="9" height="16" rx="4"/><rect x="594" y="130" width="8" height="14" rx="4"/><rect x="270" y="370" width="8" height="14" rx="4"/><rect x="590" y="440" width="20" height="40" rx="10"/></g>
-  </svg>
+  <div id="nebula"></div>
+  <img id="emblemBg" src="assets/logo.png" alt="">
   <div id="bgimg"></div>
   <video id="bgvideo" muted loop playsinline></video>
-  <div id="fx"></div>
+  <canvas id="particles"></canvas>
   <div id="vignette"></div>
 </div>
 
 <div id="app">
   <header id="topbar">
-    <div class="tb-left">
-      <button class="tb-link" data-open="website">SITIO WEB</button>
-      <button class="tb-link" data-open="discord">DISCORD</button>
-      <button class="tb-link" id="tbNews">NOTICIAS</button>
-      <button class="tb-link" id="tbCredits">INFORMACIÓN</button>
-    </div>
+    <nav class="tb-left">
+      <button class="tb-link" data-open="website">Sitio web</button>
+      <button class="tb-link" data-open="discord">Discord</button>
+      <button class="tb-link" id="tbNews">Noticias</button>
+      <button class="tb-link" id="tbCredits">Información</button>
+    </nav>
     <div class="tb-right">
       <div id="musicCtl" class="chip" title="Música ambiental">
-        <button id="mPlay" class="ico" aria-label="Reproducir o pausar">♪</button>
+        <button id="mPlay" class="ico" aria-label="Reproducir o pausar la música"></button>
         <input id="mVol" type="range" min="0" max="100" aria-label="Volumen">
-        <button id="mMute" class="ico" aria-label="Silenciar">🔊</button>
+        <button id="mMute" class="ico" aria-label="Silenciar"></button>
       </div>
       <button id="updChip" class="chip hidden"></button>
-      <button class="win" id="wMin" aria-label="Minimizar">—</button>
-      <button class="win" id="wMax" aria-label="Maximizar">▢</button>
-      <button class="win close" id="wClose" aria-label="Cerrar">✕</button>
+      <button class="win" id="wMin" aria-label="Minimizar"><svg class="i"><use href="#i-min"/></svg></button>
+      <button class="win" id="wMax" aria-label="Maximizar"><svg class="i"><use href="#i-max"/></svg></button>
+      <button class="win close" id="wClose" aria-label="Cerrar"><svg class="i"><use href="#i-close"/></svg></button>
     </div>
   </header>
 
   <aside id="side">
     <div id="logo">
-      <svg viewBox="0 0 64 64" width="46" height="46" aria-hidden="true"><path d="M32 3l24 8v18c0 16-10 27-24 32C18 56 8 45 8 29V11z" fill="#1a1226" stroke="#c9a45a" stroke-width="2.5"/><path d="M20 44V26h4v-5h4v5h8v-5h4v5h4v18h-6v-7a4 4 0 00-8 0v7z" fill="#c9a45a"/></svg>
-      <div><h1 id="brandName">Aetheria</h1><p id="brandTag"></p></div>
+      <div class="emblem"><img src="assets/logo.png" alt=""></div>
+      <div class="lt"><h1 id="brandName">Aetheria</h1><p id="brandTag"></p></div>
     </div>
-    <div class="orn"></div>
     <nav id="sidenav">
-      <button data-open="discord">Discord <i>↗</i></button>
-      <button data-open="website">Sitio web <i>↗</i></button>
-      <button id="navNews">Noticias</button>
-      <button id="navInfo">Información del servidor</button>
-      <button id="navSettings">Ajustes</button>
+      <button data-open="discord"><svg class="i"><use href="#i-chat"/></svg><span>Discord</span><svg class="i ext"><use href="#i-ext"/></svg></button>
+      <button data-open="website"><svg class="i"><use href="#i-globe"/></svg><span>Sitio web</span><svg class="i ext"><use href="#i-ext"/></svg></button>
+      <button id="navNews"><svg class="i"><use href="#i-scroll"/></svg><span>Noticias</span></button>
+      <button id="navInfo"><svg class="i"><use href="#i-info"/></svg><span>Información</span></button>
+      <button id="navSettings"><svg class="i"><use href="#i-gear"/></svg><span>Ajustes</span></button>
     </nav>
-    <section id="serverCard" class="card">
+    <section id="serverCard" class="panel">
       <div class="row"><span id="srvDot" class="dot"></span><strong id="srvState">Comprobando…</strong><span id="srvPing" class="muted"></span></div>
       <div class="kv"><span>Dirección</span><b id="srvAddr">—</b></div>
       <div class="kv"><span>Versión</span><b id="srvVer">—</b></div>
       <div class="kv"><span>Jugadores</span><b id="srvPlayers">—</b></div>
     </section>
     <div class="grow"></div>
-    <section id="accountCard" class="card">
+    <section id="accountCard" class="panel">
       <button id="accBtn" class="acc">
-        <img id="accAvatar" alt="" class="avatar"><div><b id="accName">Sin cuenta</b><small id="accType">Pulsa para elegir</small></div><i>⇄</i>
+        <span class="avwrap"><img id="accAvatar" alt="" class="avatar"><svg class="i ph"><use href="#i-user"/></svg></span>
+        <span class="at"><b id="accName">Sin cuenta</b><small id="accType">Pulsa para elegir</small></span><svg class="i dim"><use href="#i-swap"/></svg>
       </button>
-      <button id="dcBtn" class="acc small"><img id="dcAvatar" alt="" class="avatar sm hidden"><div><b id="dcName">Vincular Discord</b><small id="dcSub">Opcional</small></div></button>
+      <button id="dcBtn" class="acc small">
+        <span class="avwrap sm"><img id="dcAvatar" alt="" class="avatar sm hidden"><svg class="i ph" id="dcPh"><use href="#i-chat"/></svg></span>
+        <span class="at"><b id="dcName">Vincular Discord</b><small id="dcSub">Opcional</small></span>
+      </button>
     </section>
     <section id="playBox">
       <div id="prog" class="hidden">
@@ -90,6 +94,7 @@
         <div id="progInfo" class="muted"></div>
       </div>
       <button id="playBtn" class="play">JUGAR / UNIRSE</button>
+      <button id="testBtn" class="ghost" title="Abre Minecraft sin conectarse al servidor, para comprobar que todo funciona"><svg class="i"><use href="#i-flask"/></svg>Modo prueba · sin servidor</button>
       <button id="cancelBtn" class="ghost hidden">CANCELAR</button>
       <div id="verTag" class="muted">v1.0.0</div>
     </section>
@@ -97,16 +102,16 @@
 
   <main id="main">
     <div id="banners"></div>
-    <section id="hero" class="hero hidden"></section>
-    <div id="latestHead" class="sect"><h2>Últimas noticias</h2><div class="orn grow"></div><button id="allNews" class="linkbtn">Ver todas</button></div>
+    <section id="hero" class="hero"></section>
+    <div id="latestHead" class="sect"><h2>Últimas noticias</h2><span class="rule"></span><button id="allNews" class="linkbtn">Ver todas</button></div>
     <section id="newsGrid"></section>
-    <p id="newsEmpty" class="muted hidden"></p>
   </main>
 </div>
 
 <div id="modalRoot"></div>
 <div id="toasts"></div>
 <audio id="music" preload="auto"></audio>
+<script src="ambient.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mapa del reino</title>
+<style>
+:root{--bg:#000;--panel:rgba(255,255,255,.88);--line:#b9b9b9;--txt:#1b1b1b;--mut:#666;--acc:#1a73e8;--hov:#e6eefc}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:13px/1.35 "Helvetica Neue",Arial,sans-serif;overflow:hidden}
+#map{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none;background:#000}
+canvas.drag{cursor:grabbing}
+.box{background:var(--panel);border:2px solid rgba(0,0,0,.35);border-radius:6px;box-shadow:0 1px 5px rgba(0,0,0,.5)}
+/* zoom estilo Leaflet */
+#zoom{position:absolute;left:10px;top:10px;z-index:5;display:flex;flex-direction:column}
+#zoom button{width:30px;height:30px;border:0;border-bottom:1px solid #ccc;background:#fff;color:#000;font:bold 18px/30px "Lucida Console",Monaco,monospace;cursor:pointer;padding:0}
+#zoom button:first-child{border-radius:4px 4px 0 0}#zoom button:last-child{border-bottom:0;border-radius:0 0 4px 4px}
+#zoom button:hover{background:#f4f4f4}
+#zoom{box-shadow:0 1px 5px rgba(0,0,0,.65);border-radius:5px;border:2px solid rgba(0,0,0,.2)}
+/* panel lateral */
+#side{position:absolute;left:10px;top:112px;bottom:46px;width:236px;z-index:4;display:flex;flex-direction:column;overflow:auto;padding:0}
+#side .hd{display:flex;align-items:center;gap:6px;padding:7px 10px;font-weight:bold;background:rgba(0,0,0,.07);border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
+#side .hd:first-child{border-radius:4px 4px 0 0}
+#side .hd:before{content:"▾";color:var(--mut)}
+#side .hd.c:before{content:"▸"}
+#side .hd small{margin-left:auto;font-weight:normal;color:var(--mut)}
+#side .bd{padding:4px 4px 6px;border-bottom:1px solid var(--line)}
+#side .bd.c{display:none}
+.row{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:3px;cursor:pointer}
+.row:hover{background:var(--hov)}
+.row b{font-weight:600}.row small{color:var(--mut);display:block;font-size:11px}
+.dot{width:12px;height:12px;border-radius:2px;flex:none;border:1px solid #0004}
+.face{width:24px;height:24px;flex:none;image-rendering:pixelated;border:2px solid #888;background:#ccc}
+.sub{padding:3px 8px;color:var(--mut);font-size:12px}
+select,input[type=search]{width:100%;background:#fff;color:var(--txt);border:1px solid #aaa;border-radius:3px;padding:5px 6px;font:inherit}
+.gh{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);padding:8px 6px 2px}
+/* capas (arriba a la derecha) */
+#layers{position:absolute;right:10px;top:10px;z-index:5;padding:6px 10px;min-width:150px}
+#layers h4{margin:0 0 4px;font-size:12px}
+label.chk{display:flex;align-items:center;gap:6px;padding:2px 0;cursor:pointer;user-select:none}
+#title{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:5;padding:4px 14px;font-weight:bold;font-size:14px;max-width:46vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#card{position:absolute;right:10px;top:150px;width:260px;max-width:calc(100% - 20px);padding:10px 12px;display:none;z-index:6}
+#card h3{margin:0 0 6px;font-size:15px;padding-right:20px}
+#card p{margin:3px 0}#card .m{color:var(--mut)}
+#card button.x{position:absolute;right:6px;top:4px;background:none;border:0;color:#555;font-size:20px;cursor:pointer}
+#hud{position:absolute;left:10px;bottom:10px;z-index:5;padding:4px 10px;font:12px "Lucida Console",Monaco,monospace;pointer-events:none}
+#tip{position:absolute;pointer-events:none;background:#fff;border:1px solid #888;padding:3px 7px;border-radius:4px;font-size:12px;display:none;white-space:nowrap;z-index:7}
+#off{position:absolute;left:50%;top:48px;transform:translateX(-50%);background:#b3261e;color:#fff;padding:5px 12px;border-radius:6px;display:none;z-index:8}
+#menu{display:none;position:absolute;left:50px;top:10px;z-index:6;padding:6px 10px;cursor:pointer;font-weight:bold}
+#fitb{position:absolute;left:10px;top:76px;z-index:5;width:30px;height:30px;border:2px solid rgba(0,0,0,.2);border-radius:5px;background:#fff;cursor:pointer;font-size:15px;padding:0;box-shadow:0 1px 5px rgba(0,0,0,.65)}
+@media(max-width:700px){#side{transform:translateX(-120%);transition:transform .2s;top:56px}#side.open{transform:none}#menu{display:block}#title{display:none}#layers{top:auto;bottom:46px}#card{top:auto;bottom:90px}}
+</style>
+</head>
+<body>
+<div id="map">
+ <canvas id="cv"></canvas>
+ <div id="zoom"><button id="zi" title="Acercar">+</button><button id="zo" title="Alejar">−</button></div>
+ <button id="fitb" title="Ver todo">⌂</button>
+ <button id="menu" class="box">☰</button>
+ <div id="title" class="box">Mapa del reino</div>
+ <div id="off">Sin conexión con el servidor…</div>
+ <div id="layers" class="box"><h4>Capas</h4>
+   <label class="chk"><input type="checkbox" id="l_r" checked> Terreno</label>
+   <label class="chk"><input type="checkbox" id="l_t" checked> Territorios</label>
+   <label class="chk"><input type="checkbox" id="l_z" checked> Zonas de recursos</label>
+   <label class="chk"><input type="checkbox" id="l_e" checked> Eventos</label>
+   <label class="chk"><input type="checkbox" id="l_b" checked> Tablones</label>
+   <label class="chk"><input type="checkbox" id="l_p" checked> Jugadores</label>
+   <label class="chk"><input type="checkbox" id="l_g"> Rejilla de chunks</label>
+ </div>
+ <aside id="side" class="box">
+   <div class="hd" data-t="b_p">Jugadores <small id="pc">0</small></div>
+   <div class="bd" id="b_p"><div id="plist"></div></div>
+   <div class="hd" data-t="b_w">Mundos</div>
+   <div class="bd" id="b_w"><select id="world"></select><div class="sub" id="sub">Cargando…</div></div>
+   <div class="hd" data-t="b_r">Reinos</div>
+   <div class="bd" id="b_r"><input type="search" id="q" placeholder="Buscar gremio, territorio o zona…"><div id="list"></div></div>
+ </aside>
+ <div id="tip"></div>
+ <div id="card" class="box"><button class="x" id="cx">×</button><div id="cbody"></div></div>
+ <div id="hud">x: 0 · z: 0</div>
+</div>
+<script>
+(function(){
+'use strict';
+var cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+var D=null, P=[], world=null, view={x:0,z:0,s:0.5}, sel=null, hover=null, first=true, follow=null;
+var TILES={}, HEADS={}, tv=0;
+var ICON={MINA:'⛏',TALA:'🪓',CANTERA:'⛰',GRANJA:'🌾',PESCA:'🎣'};
+var KEY=new URLSearchParams(location.search).get('k');
+var $=function(i){return document.getElementById(i)};
+function dpr(){return window.devicePixelRatio||1}
+function resize(){var r=cv.getBoundingClientRect();cv.width=r.width*dpr();cv.height=r.height*dpr();draw()}
+function w2s(x,z){return [(x-view.x)*view.s+cv.width/2/dpr(),(z-view.z)*view.s+cv.height/2/dpr()]}
+function s2w(px,py){return [(px-cv.width/2/dpr())/view.s+view.x,(py-cv.height/2/dpr())/view.s+view.z]}
+function layer(id){return $(id).checked}
+function items(){
+ if(!D)return [];
+ var o=[];
+ if(layer('l_t'))D.territorios.forEach(function(t){if(t.world===world)o.push({k:'t',d:t,x1:t.x1,z1:t.z1,x2:t.x2+1,z2:t.z2+1})});
+ if(layer('l_z'))D.zonas.forEach(function(t){if(t.world===world)o.push({k:'z',d:t,x1:t.x1,z1:t.z1,x2:t.x2+1,z2:t.z2+1})});
+ if(layer('l_e'))D.eventos.forEach(function(t){if(t.world===world)o.push({k:'e',d:t,x1:t.x1,z1:t.z1,x2:t.x2+1,z2:t.z2+1})});
+ if(layer('l_b'))D.tablones.forEach(function(t){if(t.world===world)o.push({k:'b',d:t,x1:t.x,z1:t.z,x2:t.x,z2:t.z})});
+ if(layer('l_p'))P.forEach(function(t){if(t.world===world)o.push({k:'p',d:t,x1:t.x,z1:t.z,x2:t.x,z2:t.z})});
+ return o;
+}
+function rgba(hex,a){var n=parseInt(hex.slice(1),16);return 'rgba('+(n>>16)+','+((n>>8)&255)+','+(n&255)+','+a+')'}
+function iconFor(it){
+ if(it.k==='t')return it.d.asedio?'⚔':'🏰';
+ if(it.k==='z')return ICON[it.d.tipo]||'⛏';
+ if(it.k==='e')return it.d.tipo==='JEFE'?'💀':'👑';
+ if(it.k==='b')return '📜';
+ return '';
+}
+function tileImg(w,z,tx,tz){
+ var k=w+'|'+z+'|'+tx+'|'+tz+'|'+tv,e=TILES[k];
+ if(e)return e.ok?e.img:null;
+ var img=new Image();e={img:img,ok:false,t:Date.now()};TILES[k]=e;
+ img.onload=function(){e.ok=true;draw()};
+ img.onerror=function(){setTimeout(function(){delete TILES[k]},8000)};
+ img.src='/tiles/'+encodeURIComponent(w)+'/'+z+'/'+tx+'/'+tz+'.png'+(KEY?('?k='+encodeURIComponent(KEY)):'');
+ var ks=Object.keys(TILES);
+ if(ks.length>600){ks.sort(function(a,b){return TILES[a].t-TILES[b].t}).slice(0,200).forEach(function(x){delete TILES[x]})}
+ return null;
+}
+function cached(w,z,tx,tz){var e=TILES[w+'|'+z+'|'+tx+'|'+tz+'|'+tv];return e&&e.ok?e.img:null}
+// zoom z: 1 bloque = 2^z píxeles de tesela (z=4 -> texturas a 16 px/bloque)
+function zoomLevel(){return Math.max(-6,Math.min(4,Math.round(Math.log(view.s)/Math.LN2)))}
+function drawTerrain(W,H){
+ var z=zoomLevel(),span=256/Math.pow(2,z),a=s2w(0,0),b=s2w(W,H);
+ ctx.imageSmoothingEnabled=view.s<6;ctx.imageSmoothingQuality='high';
+ var x0=Math.floor(a[0]/span),x1=Math.floor(b[0]/span),z0=Math.floor(a[1]/span),z1=Math.floor(b[1]/span);
+ while((x1-x0+1)*(z1-z0+1)>140&&z>-6){z--;span=256/Math.pow(2,z);x0=Math.floor(a[0]/span);x1=Math.floor(b[0]/span);z0=Math.floor(a[1]/span);z1=Math.floor(b[1]/span)}
+ if((x1-x0+1)*(z1-z0+1)>140)return;
+ for(var tx=x0;tx<=x1;tx++){
+  for(var tz=z0;tz<=z1;tz++){
+   var im=tileImg(world,z,tx,tz),p=w2s(tx*span,tz*span),sz=span*view.s;
+   if(im){ctx.drawImage(im,Math.floor(p[0]),Math.floor(p[1]),Math.ceil(sz)+1,Math.ceil(sz)+1);continue}
+   // mientras carga: recorta la parte equivalente de una tesela de zoom menor ya cargada
+   for(var zz=z-1;zz>=-6;zz--){
+    var sp2=256/Math.pow(2,zz),px2=Math.floor(tx*span/sp2),pz2=Math.floor(tz*span/sp2),pim=cached(world,zz,px2,pz2);
+    if(pim){var sc=256/sp2,sx=(tx*span-px2*sp2)*sc,sy=(tz*span-pz2*sp2)*sc,sw=span*sc;
+     ctx.drawImage(pim,sx,sy,sw,sw,Math.floor(p[0]),Math.floor(p[1]),Math.ceil(sz)+1,Math.ceil(sz)+1);break}
+   }
+  }
+ }
+}
+function head(name){
+ var e=HEADS[name];
+ if(e)return e.ok?e.img:null;
+ if(!D||!D.cabezas)return null;
+ var img=new Image();e={img:img,ok:false};HEADS[name]=e;
+ img.onload=function(){e.ok=true;draw()};img.onerror=function(){};
+ img.crossOrigin='anonymous';img.src='https://mc-heads.net/avatar/'+encodeURIComponent(name)+'/40';
+ return null;
+}
+function draw(){
+ var W=cv.width/dpr(),H=cv.height/dpr();
+ ctx.setTransform(dpr(),0,0,dpr(),0,0);
+ ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+ if(D&&D.terreno&&layer('l_r')&&world)drawTerrain(W,H);
+ if(layer('l_g')){
+  var step=16; if(view.s<0.6)step=64; if(view.s<0.15)step=256; if(view.s<0.04)step=1024;
+  var a=s2w(0,0),b=s2w(W,H);
+  ctx.lineWidth=1;
+  for(var x=Math.floor(a[0]/step)*step;x<=b[0];x+=step){var p=w2s(x,0)[0];ctx.strokeStyle=(x%(step*4)===0)?'#2d2519':'#1c1812';ctx.beginPath();ctx.moveTo(p,0);ctx.lineTo(p,H);ctx.stroke()}
+  for(var z=Math.floor(a[1]/step)*step;z<=b[1];z+=step){var q=w2s(0,z)[1];ctx.strokeStyle=(z%(step*4)===0)?'#2d2519':'#1c1812';ctx.beginPath();ctx.moveTo(0,q);ctx.lineTo(W,q);ctx.stroke()}
+  var o=w2s(0,0);ctx.strokeStyle='#5a4a2a';ctx.beginPath();ctx.moveTo(o[0],0);ctx.lineTo(o[0],H);ctx.moveTo(0,o[1]);ctx.lineTo(W,o[1]);ctx.stroke();
+ }
+ var list=items();
+ list.forEach(function(it){
+  if(it.k==='b'||it.k==='p')return;
+  var a=w2s(it.x1,it.z1),b=w2s(it.x2,it.z2),w=b[0]-a[0],h=b[1]-a[1];
+  var col=it.d.color||'#9E9E9E',alpha=it.k==='t'?0.28:0.22;
+  if(it.k==='e'){col=it.d.activo?'#FFC107':'#7a6a3a';alpha=it.d.activo?0.35:0.15}
+  ctx.fillStyle=rgba(col,alpha);ctx.fillRect(a[0],a[1],w,h);
+  var asedio=it.k==='t'&&it.d.asedio;
+  ctx.lineWidth=(sel&&sel.d===it.d)?3:2;ctx.strokeStyle=asedio?'#ff3b30':rgba(col,0.95);
+  if(it.k==='z')ctx.setLineDash([6,4]);else if(it.k==='e')ctx.setLineDash([2,3]);else ctx.setLineDash([]);
+  ctx.strokeRect(a[0],a[1],w,h);ctx.setLineDash([]);
+  if(asedio){ctx.strokeStyle='#ff3b3055';ctx.lineWidth=6;ctx.strokeRect(a[0]-2,a[1]-2,w+4,h+4)}
+ });
+ // iconos y textos
+ ctx.textAlign='center';ctx.textBaseline='middle';
+ list.forEach(function(it){
+  var cx=(it.x1+it.x2)/2,cz=(it.z1+it.z2)/2,p=w2s(cx,cz);
+  if(it.k==='p'){
+   var hd=head(it.d.nombre);
+   if(hd){var S=22;ctx.fillStyle=it.d.color;ctx.fillRect(p[0]-S/2-2,p[1]-S/2-2,S+4,S+4);ctx.imageSmoothingEnabled=false;ctx.drawImage(hd,p[0]-S/2,p[1]-S/2,S,S)}
+   else{ctx.fillStyle=it.d.color;ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p[0],p[1],6,0,7);ctx.fill();ctx.stroke()}
+   ctx.font='600 11px system-ui';ctx.fillStyle='#fff';ctx.strokeStyle='#000';ctx.lineWidth=3;ctx.strokeText(it.d.nombre,p[0],p[1]+19);ctx.fillText(it.d.nombre,p[0],p[1]+19);
+   return;
+  }
+  var size=Math.max(14,Math.min(34,(it.k==='b'?22:Math.min((it.x2-it.x1),(it.z2-it.z1))*view.s*0.5)));
+  ctx.font=Math.round(size)+'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
+  ctx.fillStyle='#fff';ctx.fillText(iconFor(it),p[0],p[1]);
+  if(it.k!=='b'&&view.s>0.08){
+   ctx.font='600 12px system-ui';var t=it.d.nombre;
+   ctx.strokeStyle='#000';ctx.lineWidth=3;ctx.strokeText(t,p[0],p[1]+size*0.75+4);ctx.fillStyle='#f4e7c4';ctx.fillText(t,p[0],p[1]+size*0.75+4);
+   if(it.k==='t'&&it.d.dueno&&view.s>0.12){ctx.font='11px system-ui';ctx.lineWidth=3;ctx.strokeText(it.d.dueno,p[0],p[1]+size*0.75+18);ctx.fillStyle=it.d.color;ctx.fillText(it.d.dueno,p[0],p[1]+size*0.75+18)}
+  }
+ });
+ // nodos
+ if(D&&layer('l_t'))D.territorios.forEach(function(t){if(t.world===world&&t.nodo){var p=w2s(t.nodo[0],t.nodo[1]);ctx.font='16px "Segoe UI Emoji","Apple Color Emoji",sans-serif';ctx.fillText('💎',p[0],p[1])}});
+}
+function find(px,py){
+ var w=s2w(px,py),L=items(),best=null,area=1e18;
+ L.forEach(function(it){
+  var pad=(it.k==='b'||it.k==='p')?14/view.s:0;
+  if(w[0]>=it.x1-pad&&w[0]<=it.x2+pad&&w[1]>=it.z1-pad&&w[1]<=it.z2+pad){
+   var a=(it.x2-it.x1+1)*(it.z2-it.z1+1);
+   if(it.k==='b'||it.k==='p')a=0; if(a<area){area=a;best=it}
+  }
+ });
+ return best;
+}
+function text(el,tag,txt,cls){var n=document.createElement(tag);n.textContent=txt;if(cls)n.className=cls;el.appendChild(n);return n}
+function showCard(it){
+ sel=it;var c=$('card'),b=$('cbody');b.textContent='';
+ if(!it){c.style.display='none';draw();return}
+ var d=it.d;c.style.display='block';
+ if(it.k==='t'){
+  text(b,'h3','🏰 '+d.nombre);
+  text(b,'p',d.dueno?('Dueño: '+d.dueno+' · nivel '+d.nivel):'Territorio libre, a la venta');
+  text(b,'p','Tamaño: '+(d.x2-d.x1+1)+' × '+(d.z2-d.z1+1)+' bloques','m');
+  text(b,'p','Centro: '+Math.round((d.x1+d.x2)/2)+', '+Math.round((d.z1+d.z2)/2),'m');
+  if(d.asedio)text(b,'p','⚔ ASEDIO: '+d.asedio.atacante+' ataca a '+d.asedio.defensor);
+ }else if(it.k==='z'){
+  text(b,'h3',(ICON[d.tipo]||'⛏')+' '+d.nombre);
+  text(b,'p','Tipo: '+d.tipo.toLowerCase());
+  text(b,'p',d.dueno?('Controla: '+d.dueno):'Zona libre: ¡conquístala!');
+  text(b,'p','Produce cada '+d.cada+' min','m');
+ }else if(it.k==='e'){
+  text(b,'h3',(d.tipo==='JEFE'?'💀 ':'👑 ')+d.nombre);
+  text(b,'p',d.tipo==='JEFE'?'Evento de jefe':'Rey de la colina (KOTH)');
+  text(b,'p',d.activo?'🔥 EN MARCHA AHORA':'Inactivo');
+  text(b,'p','Recompensa: '+d.xp+' XP','m');
+ }else if(it.k==='b'){
+  text(b,'h3','📜 Tablón de misiones');text(b,'p','Coordenadas: '+d.x+', '+d.z,'m');
+ }else{
+  text(b,'h3','🧍 '+d.nombre);text(b,'p',d.gremio?('Gremio: '+d.gremio):'Sin gremio');text(b,'p','Posición: '+d.x+', '+d.z,'m');var fb=text(b,'p',follow===d.nombre?'📍 Siguiendo (clic para soltar)':'📍 Clic aquí para seguirle','m');fb.style.cursor='pointer';fb.style.color='#d9a84a';fb.onclick=function(){follow=(follow===d.nombre)?null:d.nombre;showCard(it)};
+ }
+ draw();
+}
+function centerOn(it){view.x=(it.x1+it.x2)/2;view.z=(it.z1+it.z2)/2;var sz=Math.max(it.x2-it.x1,it.z2-it.z1,40);view.s=Math.max(0.2,Math.min(6,Math.min(cv.width/dpr(),cv.height/dpr())*0.5/sz));draw()}
+function fit(){
+ var L=items().filter(function(i){return i.k!=='p'});
+ if(!L.length){view={x:0,z:0,s:0.5};draw();return}
+ var x1=1e9,z1=1e9,x2=-1e9,z2=-1e9;
+ L.forEach(function(i){x1=Math.min(x1,i.x1);z1=Math.min(z1,i.z1);x2=Math.max(x2,i.x2);z2=Math.max(z2,i.z2)});
+ view.x=(x1+x2)/2;view.z=(z1+z2)/2;
+ var W=cv.width/dpr(),H=cv.height/dpr();
+ view.s=Math.max(0.2,Math.min(2,Math.min(W/Math.max(80,x2-x1),H/Math.max(80,z2-z1))*0.8));draw();
+}
+function buildList(){
+ var q=$('q').value.trim().toLowerCase(),box=$('list');box.textContent='';var pbox=$('plist');pbox.textContent='';
+ if(!D)return;
+ function row(color,title,sub,fn){var r=document.createElement('div');r.className='row';var d=document.createElement('span');d.className='dot';d.style.background=color;r.appendChild(d);var w=document.createElement('div');var b=document.createElement('b');b.textContent=title;w.appendChild(b);var s=document.createElement('small');s.textContent=sub;w.appendChild(s);r.appendChild(w);r.onclick=fn;box.appendChild(r)}
+ function head2(t){var h=document.createElement('div');h.className='gh';h.textContent=t;box.appendChild(h)}
+  var ps=P.slice().sort(function(a,b){return a.nombre.localeCompare(b.nombre)});
+ $('pc').textContent=ps.length;
+ if(!ps.length){var e0=document.createElement('div');e0.className='sub';e0.textContent='Nadie en línea';pbox.appendChild(e0)}
+ ps.forEach(function(p){
+  var r=document.createElement('div');r.className='row';
+  var im=document.createElement('img');im.className='face';im.style.borderColor=p.color;
+  if(D&&D.cabezas){im.src='https://mc-heads.net/avatar/'+encodeURIComponent(p.nombre)+'/32';im.onerror=function(){im.removeAttribute('src')}}
+  r.appendChild(im);var w=document.createElement('div');var b=document.createElement('b');b.textContent=p.nombre;w.appendChild(b);var sm=document.createElement('small');sm.textContent=p.gremio||'Sin gremio';w.appendChild(sm);r.appendChild(w);
+  r.onclick=function(){world=p.world;$('world').value=world;follow=p.nombre;var it={k:'p',d:p,x1:p.x,z1:p.z,x2:p.x,z2:p.z};view.x=p.x;view.z=p.z;view.s=Math.max(view.s,0.8);showCard(it);if(window.innerWidth<=700)$('side').classList.remove('open')};
+  pbox.appendChild(r);
+ });
+ var gs=D.gremios.filter(function(g){return !q||g.nombre.toLowerCase().indexOf(q)>=0}).sort(function(a,b){return b.nivel-a.nivel});
+ if(gs.length)head2('Gremios');
+ gs.forEach(function(g){row(g.color,g.nombre,'Nivel '+g.nivel+' · '+g.miembros+' miembros ('+g.enLinea+' en línea)',function(){
+  var t=D.territorios.filter(function(t){return t.duenoId===g.id})[0];
+  if(t){world=t.world;$('world').value=world;var it={k:'t',d:t,x1:t.x1,z1:t.z1,x2:t.x2+1,z2:t.z2+1};centerOn(it);showCard(it);if(window.innerWidth<=700)$('side').classList.remove('open')}
+ })});
+ var ts=D.territorios.filter(function(t){return !q||t.nombre.toLowerCase().indexOf(q)>=0});
+ if(ts.length)head2('Territorios');
+ ts.forEach(function(t){row(t.color,t.nombre,t.dueno?('De '+t.dueno):'Libre',function(){world=t.world;$('world').value=world;var it={k:'t',d:t,x1:t.x1,z1:t.z1,x2:t.x2+1,z2:t.z2+1};centerOn(it);showCard(it);if(window.innerWidth<=700)$('side').classList.remove('open')})});
+ var zs=D.zonas.filter(function(t){return !q||t.nombre.toLowerCase().indexOf(q)>=0});
+ if(zs.length)head2('Zonas');
+ zs.forEach(function(t){row(t.color,(ICON[t.tipo]||'')+' '+t.nombre,t.dueno?('Controla '+t.dueno):'Libre',function(){world=t.world;$('world').value=world;var it={k:'z',d:t,x1:t.x1,z1:t.z1,x2:t.x2+1,z2:t.z2+1};centerOn(it);showCard(it);if(window.innerWidth<=700)$('side').classList.remove('open')})});
+ var es=D.eventos.filter(function(t){return !q||t.nombre.toLowerCase().indexOf(q)>=0});
+ if(es.length)head2('Eventos');
+ es.forEach(function(t){row(t.activo?'#FFC107':'#7a6a3a',(t.tipo==='JEFE'?'💀 ':'👑 ')+t.nombre,t.activo?'¡En marcha!':'Inactivo',function(){world=t.world;$('world').value=world;var it={k:'e',d:t,x1:t.x1,z1:t.z1,x2:t.x2+1,z2:t.z2+1};centerOn(it);showCard(it)})});
+}
+function load(){
+ var u='/api/mapa'+(KEY?('?k='+encodeURIComponent(KEY)):'');
+ fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+  D=j;$('off').style.display='none';tv=Math.floor(Date.now()/60000);$('title').textContent=j.servidor||'Mapa del reino';document.title=(j.servidor||'Mapa')+' · mapa';
+  var sw=$('world'),cur=world;
+  if(sw.options.length!==j.mundos.length){sw.textContent='';j.mundos.forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;sw.appendChild(o)})}
+  if(!cur){var pref=j.territorios.length?j.territorios[0].world:j.mundos[0];world=pref;sw.value=pref}
+  var live=j.eventos.filter(function(e){return e.activo}).length,war=j.territorios.filter(function(t){return t.asedio}).length;
+  $('sub').textContent=P.length+' en línea · '+j.gremios.length+' gremios · '+j.territorios.length+' territorios'+(war?(' · ⚔ '+war+' asedio'+(war>1?'s':'')):'')+(live?(' · 🔥 '+live+' evento'+(live>1?'s':'')):'');
+  if(first){first=false;if(!j.terreno)$('l_g').checked=true;fit()}
+  if(sel){var m=null;items().forEach(function(i){if(i.d.id&&i.d.id===sel.d.id&&i.k===sel.k)m=i});if(m)sel=m}
+  buildList();draw();
+ }).catch(function(){$('off').style.display='block'});
+}
+// interacción
+var drag=null,pts={};
+cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);pts[e.pointerId]=[e.clientX,e.clientY];drag={x:e.clientX,y:e.clientY,vx:view.x,vz:view.z,moved:false,pinch:null};cv.classList.add('drag')});
+cv.addEventListener('pointermove',function(e){
+ var r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,w=s2w(px,py);
+ $('hud').textContent='x: '+Math.round(w[0])+' · z: '+Math.round(w[1]);
+ pts[e.pointerId]=[e.clientX,e.clientY];
+ var ids=Object.keys(pts);
+ if(ids.length===2&&drag){
+  var a=pts[ids[0]],b=pts[ids[1]],d=Math.hypot(a[0]-b[0],a[1]-b[1]);
+  if(drag.pinch){view.s=Math.max(0.012,Math.min(24,view.s*d/drag.pinch));draw()}
+  drag.pinch=d;drag.moved=true;return;
+ }
+ if(drag){
+  var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;
+  if(drag.moved){follow=null;view.x=drag.vx-dx/view.s;view.z=drag.vz-dy/view.s;draw()}
+ }else{
+  var it=find(px,py),t=$('tip');
+  if(it){t.style.display='block';t.style.left=(px+14)+'px';t.style.top=(py+14)+'px';t.textContent=(iconFor(it)+' '+(it.d.nombre||it.d.id)).trim()}else t.style.display='none';
+ }
+});
+cv.addEventListener('pointerup',function(e){
+ var r=cv.getBoundingClientRect();delete pts[e.pointerId];cv.classList.remove('drag');
+ if(drag&&!drag.moved){showCard(find(e.clientX-r.left,e.clientY-r.top))}
+ drag=null;
+});
+cv.addEventListener('pointercancel',function(e){delete pts[e.pointerId];drag=null;cv.classList.remove('drag')});
+cv.addEventListener('wheel',function(e){
+ e.preventDefault();var r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,b=s2w(px,py);
+ view.s=Math.max(0.012,Math.min(24,view.s*(e.deltaY<0?1.15:1/1.15)));
+ var a=s2w(px,py);view.x+=b[0]-a[0];view.z+=b[1]-a[1];draw();
+},{passive:false});
+$('zi').onclick=function(){view.s=Math.min(24,view.s*1.4);draw()};
+$('zo').onclick=function(){view.s=Math.max(0.012,view.s/1.4);draw()};
+$('fitb').onclick=fit;$('cx').onclick=function(){showCard(null)};
+$('world').onchange=function(){world=this.value;sel=null;$('card').style.display='none';fit()};
+$('q').oninput=buildList;
+['l_r','l_t','l_z','l_e','l_b','l_p','l_g'].forEach(function(i){$(i).onchange=draw});
+Array.prototype.forEach.call(document.querySelectorAll('#side .hd'),function(h){h.onclick=function(){h.classList.toggle('c');document.getElementById(h.getAttribute('data-t')).classList.toggle('c')}});
+$('menu').onclick=function(){$('side').classList.toggle('open')};
+window.addEventListener('resize',resize);
+function loadP(){
+ fetch('/api/jugadores'+(KEY?('?k='+encodeURIComponent(KEY)):''),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+  var pk=(j.jugadores||[]).map(function(p){return p.nombre}).join(',');P=j.jugadores||[];if(pk!==window._pk){window._pk=pk;buildList()}
+  var se=$('sub');if(se)se.textContent=se.textContent.replace(/^\d+ en línea/,P.length+' en línea');
+  if(follow){var f=P.filter(function(p){return p.nombre===follow})[0];if(f){if(f.world!==world){world=f.world;$('world').value=world}view.x=f.x;view.z=f.z}else follow=null}
+  if(sel&&sel.k==='p'){var m=P.filter(function(p){return p.nombre===sel.d.nombre})[0];if(m){sel.d=m;sel.x1=sel.x2=m.x;sel.z1=sel.z2=m.z}}
+  draw();
+ }).catch(function(){});
+}
+resize();load();loadP();setInterval(load,5000);setInterval(loadP,1500);setInterval(buildList,6000);
+})();
+</script>
+</body>
+</html>

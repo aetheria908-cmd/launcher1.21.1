@@ -1,5 +1,9 @@
 {
-  "repo": { "owner": "aetheria908-cmd", "name": "launcher1.21.1", "branch": "main" },
+  "repo": {
+    "owner": "aetheria908-cmd",
+    "name": "launcher1.21.1",
+    "branch": "main"
+  },
   "server": {
     "name": "AetheriaRPG",
     "address": "localhost",
@@ -7,11 +11,27 @@
     "minecraftVersion": "1.21.1"
   },
   "urls": {
-    "discord": "https://discord.gg/B8PhTZ2ks",
+    "discord": "https://discord.gg/As9dpzaRTr",
     "website": "https://lovely-phoenix-2200be.netlify.app"
   },
   "newsUrl": "https://raw.githubusercontent.com/aetheria908-cmd/launcher1.21.1/main/news/news.json",
-  "maintenance": { "enabled": false, "message": "" },
-  "launcher": { "minVersion": "1.0.0", "message": "" },
-  "settings": { "defaultBackground": "", "defaultVideo": "", "defaultMusic": "" }
+  "maintenance": {
+    "enabled": false,
+    "message": ""
+  },
+  "launcher": {
+    "minVersion": "1.0.0",
+    "message": ""
+  },
+  "settings": {
+    "defaultBackground": "",
+    "defaultVideo": "",
+    "defaultMusic": ""
+  },
+  "auth": {
+    "microsoftClientId": "",
+    "discordClientId": "",
+    "discordGuildId": "",
+    "discordTokenExchangeUrl": ""
+  }
 }

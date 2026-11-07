@@ -26,6 +26,7 @@ async function ensureFiles(list, { progress, signal, full = false, concurrency =
   await pool(missing, concurrency, (f) => downloadRetry(f.url, f.dest, {
     sha1: f.sha1, sha256: f.sha256, size: f.size, signal, strict, onBytes: (b) => progress.add(b),
   }), signal);
+  progress.push(true); // emite siempre el último valor (100 %) aunque el límite de frecuencia lo hubiera omitido
   return missing.length;
 }
 module.exports = { ensureFiles, valid };

@@ -1,0 +1,330 @@
+# ============================================================
+#  GremiosGUI - configuración
+#  Todo lo que dice "Coronas" es la moneda que defines con
+#  /gremioadmin moneda set (objeto en la mano).
+# ============================================================
+
+gui:
+  # true = títulos con el resourcepack (arte dorado). false = títulos de texto y botones con items normales.
+  usar-resourcepack: true
+
+xp:
+  # XP para subir del nivel L al L+1:  L * por-nivel + base
+  por-nivel: 500
+  base: 1000
+  max-por-entrega: 2000
+  # 0 = sin tope
+  tope-diario-jugador: 0
+  tope-diario-repetibles: 600
+
+miembros:
+  # Máximo de miembros según nivel de territorio: Pueblo, Fortaleza, Reinado
+  max-por-nivel: [8, 20, 40]
+
+invitaciones:
+  expira-segundos: 300
+
+territorio:
+  max-volumen: 12000000
+  precio-defecto: 64
+  # Coste para subir de nivel (por defecto; cada territorio puede tener el suyo con /territorio precio)
+  mejora-fortaleza: 128
+  mejora-reinado: 512
+  nivel-gremio-fortaleza: 5
+  nivel-gremio-reinado: 12
+  # Al crear un territorio se guarda automáticamente su estado original
+  snapshot-al-crear: true
+  teleport-espera-segundos: 30
+
+snapshot:
+  # Milisegundos de trabajo por tick al guardar/restaurar (menos = más suave, más lento)
+  ms-por-tick: 30
+  # Si el servidor baja de TPS, el trabajo por tick se reduce solo
+  adaptar-tps: true
+  ms-minimo: 4
+
+proteccion:
+  reclutas-construyen: false
+  reclutas-cofres: true
+
+banco:
+  # Rango mínimo para retirar: RECLUTA, MIEMBRO, OFICIAL, MARISCAL, LIDER
+  retiro-rango: OFICIAL
+
+mantenimiento:
+  # Cada cuántos días se cobra
+  dias: 7.0
+  # Coste por nivel de territorio (Pueblo, Fortaleza, Reinado)
+  costo-por-nivel: [8, 24, 64]
+  # Impagos seguidos antes de perder el territorio
+  impagos-max: 3
+
+mejoras:
+  guardia:
+    max: 5
+    costo-base: 32
+  nucleo:
+    max: 5
+    costo-base: 48
+    vida-por-nivel: 150
+  capacidad:
+    max: 5
+    costo-base: 24
+    miembros-por-nivel: 5
+
+raid:
+  # Cinemática al empezar un asedio (títulos, sonidos y cámara orbitando el Nodo)
+  cinematica:
+    activa: true
+    camara: true       # usa modo espectador unos segundos (se restaura solo)
+    segundos: 6
+    en-pruebas: false  # también en /gremioadmin raid prueba
+  # Rango mínimo para declarar un asedio
+  rango-minimo-declarar: MARISCAL
+  requiere-territorio: true
+  nivel-minimo-objetivo: 1
+  min-miembros-atacante: 2
+  # Coste de declarar (se paga del banco del gremio atacante)
+  costo-declarar: 16
+  # Minutos entre la declaración y el inicio
+  aviso-minutos: 720
+  duracion-minutos: 75
+  # Tiempo para saquear cuando el atacante gana
+  saqueo-minutos: 12
+  # Defensores conectados necesarios al empezar
+  min-defensores-online: 1
+  min-atacantes-online: 1
+  posponer-minutos: 30
+  max-posposiciones: 2
+  proteccion-nuevo-gremio-horas: 24
+  proteccion-tras-raid-horas: 6
+  cooldown-atacante-horas: 12
+  # Porcentaje del banco del defensor que se lleva el atacante si gana
+  saqueo-banco-pct: 25
+  xp-victoria: 800
+  xp-defensa: 400
+  # Ventana horaria (hora del servidor). Si activo, los raids solo empiezan dentro de la ventana.
+  ventana:
+    activo: false
+    inicio-hora: 18
+    fin-hora: 23
+  nodo:
+    vida: 1500
+    # Multiplicador del daño cuerpo a cuerpo (espadas, hachas...)
+    multiplicador-melee: 2.0
+    regen-por-segundo: 1.5
+    regen-espera-segundos: 30
+    # Si recibe más de "umbral" de daño en 10 s, se activa un escudo
+    escudo-umbral: 300
+    escudo-segundos: 8
+  guardias:
+    # Guardias del Capitán durante el raid: Pueblo, Fortaleza, Reinado (+2 por nivel de mejora Guardia)
+    por-nivel: [0, 3, 6]
+
+asedio:
+  nivel-taller: 2            # nivel de territorio para comprar armas de asedio (las flechas desde nivel 1)
+  max-unidades-por-gremio: 6
+  canon:
+    vida: 120
+    espera-segundos: 6
+    velocidad: 2.2
+  catapulta:
+    vida: 200
+    espera-segundos: 12
+    velocidad: 1.9
+    angulo: 50
+  ariete:
+    vida: 250
+    espera-segundos: 2.5
+    dano-puerta: 90
+    dano-nodo: 40
+    alcance: 5.0
+  capacidad-municion: 4
+  # Los bloques con resistencia a explosiones mayor que esto no se destruyen (obsidiana, etc.)
+  resistencia-maxima-bloque: 100
+  max-bloques-por-impacto: 90
+  max-bloques-danados-por-territorio: 250000
+  # Precios del Herrero de Asedio (Coronas) y cantidad por compra
+  precios:
+    CANON: 48
+    ARIETE: 64
+    CATAPULTA: 96
+    BALA_HIERRO: 8
+    BALA_EXPLOSIVA: 16
+    BALA_INCENDIARIA: 12
+    PIEDRA_CATAPULTA: 12
+    PIEDRA_FUEGO: 14
+  cantidad-compra:
+    BALA_HIERRO: 4
+    BALA_EXPLOSIVA: 4
+    BALA_INCENDIARIA: 4
+    PIEDRA_CATAPULTA: 2
+    PIEDRA_FUEGO: 2
+  # Valores por munición (opcional: si no existe, se usan los de fábrica)
+  # Por munición: nodo = daño al Nodo, radio = radio del golpe, bloques = radio de destrucción,
+  # jugador = daño a jugadores, alcance = multiplicador de velocidad (más alto = llega más lejos).
+  # Las más potentes son más lentas y llegan menos lejos.
+  municion:
+    BALA_HIERRO:      {nodo: 40,  radio: 1.8, bloques: 1.8, jugador: 6,  alcance: 1.25}
+    BALA_EXPLOSIVA:   {nodo: 110, radio: 3.2, bloques: 3.5, jugador: 12, alcance: 0.80}
+    BALA_INCENDIARIA: {nodo: 50,  radio: 2.5, bloques: 2.0, jugador: 6,  alcance: 1.00}
+    PIEDRA_CATAPULTA: {nodo: 120, radio: 3.5, bloques: 3.5, jugador: 10, alcance: 0.85}
+    PIEDRA_FUEGO:     {nodo: 80,  radio: 3.5, bloques: 3.0, jugador: 8,  alcance: 1.00}
+  # Recetas de crafteo (además de comprarlas)
+  crafteo: true
+
+obras:
+  # Al reparar con Coronas del banco: 1 Corona por cada X bloques
+  bloques-por-corona: 25
+  max-bloques-por-operacion: 4000
+
+# Historial de asedios (se guarda en historial.yml)
+historial:
+  max-entradas: 100
+
+# Mapa web: si tienes Dynmap, dibuja los territorios (color según estado)
+dynmap:
+  activo: true               # si Dynmap está instalado, dibuja territorios, zonas, eventos y tablones con iconos
+  refrescar-segundos: 30
+  url: ""                    # enlace público de tu Dynmap (p. ej. http://tu-ip:8123); /gremio mapaweb lo muestra a los jugadores
+
+# Puertas y puentes de fortaleza (se crean con /territorio puerta ...)
+puertas:
+  vida-por-defecto: 600
+  # Al terminar el asedio (sin saqueo) las puertas se reconstruyen solas
+  reparar-al-terminar: true
+
+# Torres de ballesta (defensa automática durante un asedio)
+torres:
+  precio: 120            # del banco del gremio
+  mejora: [150, 300]     # coste de nivel 1->2 y 2->3
+  maximo-por-nivel-territorio: [2, 4, 8]
+  vida: [150, 250, 400]
+  dano: [4, 6, 9]
+  espera-segundos: [2.0, 1.5, 1.0]
+  alcance: [18, 22, 26]
+  # Objetivos de las torres: disparan solas siempre que tengan flechas cargadas.
+  objetivos:
+    mobs: true              # mobs hostiles
+    jugadores: ENEMIGOS     # ENEMIGOS (no miembros ni aliados) | INTRUSOS (cualquiera que no sea del gremio)
+  # Flechas: se fabrican en el Herrero con materiales + dinero y se cargan en cada torre.
+  flechas:
+    cantidad: 16                  # flechas por fabricación
+    capacidad: [64, 128, 256]     # por tipo y por nivel de torre (+ Armería del reino)
+    reforzada: {dano-extra: 2, precio: 12, materiales: {STICK: 8, FEATHER: 8, IRON_INGOT: 4}}
+    veneno:    {dano-extra: 1, precio: 20, segundos: 6, materiales: {STICK: 8, FEATHER: 8, SPIDER_EYE: 6}}
+    fuego:     {dano-extra: 1, precio: 20, segundos: 5, materiales: {STICK: 8, FEATHER: 8, BLAZE_POWDER: 4}}
+    escarcha:  {dano-extra: 1, precio: 24, segundos: 4, materiales: {STICK: 8, FEATHER: 8, PACKED_ICE: 3}}
+
+# Eventos de territorio (KOTH / Jefe). Se crean con /gremioadmin evento ... o desde el panel admin.
+eventos:
+  participacion-pct: 20   # % de la recompensa para el resto de participantes (KOTH)
+
+# Modelos 3D propios (necesitan el resourcepack aplicado)
+modelos:
+  npc: true       # NPC de territorio, trabajadores de zona y tablón con modelo propio
+  giro: 0         # grados extra si los modelos salen de espaldas (/gremioadmin modelo probar)
+  bandera: true   # mástil 3D con los colores de la bandera del gremio (en vez de la bandera de bloque)
+
+# Zonas de recursos
+zonas:
+  nivel-maximo: 5
+  horas-por-nivel: 6                        # horas seguidas con la zona para subir de nivel
+  multiplicador-por-nivel: [1.0, 1.25, 1.5, 1.75, 2.0]
+  proteccion-tras-captura-segundos: 300     # nadie puede empezar a conquistarla justo después
+
+# Misiones de gremio
+misiones:
+  max-completadas-por-dia: 12
+  max-bloques-colocados-por-chunk: 2000     # antiexploit "poner y romper" (solo bloques de misiones MINAR)
+
+# NPC del territorio: nivel mínimo de territorio (1 pueblo, 2 fortaleza, 3 reinado) para que aparezcan.
+npcs:
+  nivel-minimo:
+    alcalde: 1
+    intendente: 1
+    maestro: 1
+    herrero: 1
+    capitan: 2
+    embajador: 3
+
+# Mejoras de reino (se pagan del banco del gremio, Mariscal o superior). Todo opcional: hay valores por defecto.
+reino:
+  armeria:  {max: 5, nivel-territorio: 1, efecto: 8, efecto2: 16}
+  atalaya:  {max: 5, nivel-territorio: 2, efecto: 8, efecto2: 2}
+  muralla:  {max: 5, nivel-territorio: 2, efecto: 15}
+  tesoro:   {max: 5, nivel-territorio: 1, efecto: 8}
+  hospital: {max: 2, nivel-territorio: 2, efecto: 1}
+  forja:    {max: 5, nivel-territorio: 1, efecto: 6}
+
+# Anuncios a Discord por webhook (sin bot). Canal -> Ajustes -> Integraciones -> Webhooks -> copiar URL.
+discord:
+  activo: true
+  webhook: "https://discord.com/api/webhooks/1567789878849044550/0NLzk_aH0s-NPfe8IuoAt2cAP9uifSIwtug_ARJCKmL9GyBzp5VDh7bNOrHmnsqaTSpn"
+  nombre: "Crónicas de la Corona Rota"
+  tipos: {asedios: true, eventos: true, gremios: true, alianzas: true, ranking: true, servidor: true}
+  titulos: {asedios: "⚔ Asedio", eventos: "⚑ Evento", gremios: "🏰 Gremios", alianzas: "🤝 Diplomacia", ranking: "🏆 Ranking", servidor: "🖥 Servidor"}
+  colores: {asedios: "E74C3C", eventos: "F1C40F", gremios: "3498DB", alianzas: "2ECC71", ranking: "9B59B6", servidor: "95A5A6"}
+
+# Mapa web propio (sin Dynmap): una página con territorios, zonas, eventos e iconos. Solo lectura.
+web:
+  activo: true
+  puerto: 8124              # debe estar libre (8123 es el de Dynmap); en hosting hay que abrirlo/asignarlo
+  bind: "0.0.0.0"           # 127.0.0.1 = solo accesible desde el propio PC
+  url: ""                   # enlace público si usas dominio o proxy, p. ej. https://mapa.miserver.com
+  clave: ""                 # opcional: si pones algo, el enlace lleva ?k=clave y sin ella da 403
+  titulo: "Crónicas de la Corona Rota"
+  refresco-segundos: 5
+  mostrar-jugadores: true   # jugadores en vivo en el mapa; cada uno puede ocultarse con /gremio ocultar
+  cabezas: true             # muestra la cabeza (skin) del jugador, descargada de mc-heads.net; false = solo un punto
+  ocultar-espectadores: true  # no muestra a quien esté en modo espectador ni en vanish
+  refresco-jugadores-ticks: 20
+  mapa-terreno: true        # dibuja el terreno real (como Dynmap). false = solo territorios sobre rejilla
+  prerender-al-iniciar: true
+  terreno:
+    radio: 0                # 0 = hasta el borde del mundo (/worldborder). >0 = recorta a ese radio desde el centro
+    generar-chunks: false   # true = genera los chunks que falten al dibujar (¡carga mucho el servidor! mejor pregenerar con Chunky)
+    dibujar-todo-maximo: 25000  # tope de teselas para /gremioadmin web todo (cada una = 256x256 bloques)
+    ttl-minutos: 60         # cada cuánto se vuelve a dibujar una zona ya generada
+    prerender-maximo: 40    # teselas que se preparan al iniciar (cada una = 256x256 bloques)
+    texturas: true          # dibuja con las texturas oficiales de Minecraft (se descargan de Mojang una vez)
+    descargar-texturas: true  # false = no descargar; copia tú el jar del cliente a plugins/GremiosGUI/cache/
+    cliente-jar: ""         # ruta a un jar del cliente de Minecraft, si no quieres la descarga automática
+    brillo: 1.12            # 1.0 = oscuro como en el juego, 1.2 = más claro (estilo Dynmap)
+
+# ---------------------------------------------------------------- Moneda (Vault opcional)
+currency:
+  modo: item            # item = objeto físico (/gremioadmin moneda set) | vault = dinero de Vault
+  vault-nombre: monedas # nombre que se muestra en modo vault
+
+# ---------------------------------------------------------------- Compatibilidad
+compat:
+  bedrock:
+    menus-simples: true # jugadores de Bedrock/Geyser ven menús sin resourcepack (cada uno puede cambiarlo con /gremio menusimple)
+
+# ---------------------------------------------------------------- Justicia en la guerra
+justicia:
+  activo: true
+  ratio-maximo: 4.0         # no puedes asediar a un gremio al que superas más de 4 veces en miembros (0 = sin límite)
+  ratio-penalizacion: 2.0   # a partir de aquí el botín y la XP bajan proporcionalmente
+  botin-minimo-pct: 10      # el botín nunca baja de este % del normal
+  defensores-pct: 30        # % de defensores conectados necesarios para empezar (mínimo raid.min-defensores-online)
+  defensores-max: 5         # tope de defensores exigidos
+  noche:
+    activo: true            # los gremios pequeños no pueden ser asediados de noche
+    pequeno-max-miembros: 4
+    inicio-hora: 23
+    fin-hora: 9
+
+# ---------------------------------------------------------------- Anti-abuso
+antiabuso:
+  activo: true
+  auditoria: true                  # registro en auditoria.log (/gremioadmin auditoria)
+  espera-tras-salir-horas: 12      # tiempo antes de poder unirte a otro gremio
+  bloquear-entrada-en-asedio: true # un gremio en asedio no admite miembros nuevos
+  bloquear-salida-en-asedio: true  # nadie sale ni es expulsado durante un asedio
+  bloquear-retiro-en-asedio: true  # banco bloqueado para retiros durante un asedio
+  bloquear-ender-en-asedio: true   # sin cofre de Ender durante el asedio activo/saqueo
+  retiro-nuevo-miembro-horas: 24   # un miembro nuevo no retira del banco hasta pasado este tiempo
+  retiro-alerta-pct: 50            # avisa al líder si alguien retira >= este % del banco
+  retiro-alerta-minimo: 64

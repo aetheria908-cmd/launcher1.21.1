@@ -1,0 +1,177 @@
+# =====================================================================
+#  Shopkeepers Medieval - Mercado, Banco, Rutas de mercaderes
+#  Colores con &. Recarga con /mercadoadmin recargar
+# =====================================================================
+
+# Monedas. LO NORMAL: toma en la mano tu item personalizado y usa  /mercadoadmin moneda base
+# (y /mercadoadmin moneda alta [valor]). Eso gana a todo lo demas y usa el item COMPLETO
+# (nombre, lore, modelo, NBT). Si no hay moneda elegida, se leen de plugins/Shopkeepers/config.yml.
+moneda:
+  leer-de-shopkeepers: true
+  # Solo se usan si leer-de-shopkeepers es false o no se encuentra la config de Shopkeepers.
+  base: EMERALD
+  alta: EMERALD_BLOCK   # AIR = sin moneda alta
+  valor-alta: 9
+
+mercado:
+  habilitado: true
+  # Mensaje en el chat cuando una compra/venta cambia el precio (ayuda a entenderlo).
+  avisar-cambio-precio: true
+  # true = al apagar el servidor se devuelven los precios BASE (util si vas a quitar el addon)
+  restaurar-al-apagar: false
+  # El mercado se activa SOLO en los mercaderes (nada que marcar a mano).
+  auto-activar:
+    habilitado: true
+    tiendas-admin: true       # mercaderes de admin (los del servidor)
+    tiendas-jugador: false    # OJO: si lo activas, el mercado cambia los precios que ponen los duenos
+    existentes: true          # tambien los que ya existian al arrancar
+  # Menu principal con categorias (Forja, Granja, Alquimia, Minas, Construccion, Bazar),
+  # cada una con su propio fondo. false = lista unica.
+  categorias: true
+  # Cuanta demanda sube por cada unidad vendida por una tienda (y baja por cada unidad
+  # que un jugador le vende a una tienda de compra).
+  demanda-por-unidad: 0.004
+  # multiplicador = 1 + demanda * sensibilidad (luego se limita a min/max)
+  sensibilidad: 1.0
+  multiplicador-min: 0.5
+  multiplicador-max: 2.5
+  # La demanda vuelve sola al equilibrio. Tiempo en que se reduce a la mitad:
+  recuperacion-minutos: 180
+  # Cada cuantos minutos se guarda un punto para la grafica de historial.
+  muestreo-minutos: 10
+  historial-max-muestras: 1008
+  guardar-cada-minutos: 5
+  eventos:
+    aleatorios: true
+    # Probabilidad (0-1) de que empiece un evento aleatorio cada hora.
+    probabilidad-por-hora: 0.15
+    maximo-simultaneos: 2
+    plantillas:
+      feria:
+        nombre: "&6&lFeria del Reino"
+        multiplicador: 0.80
+        duracion-minutos: 30
+        items: ["*"]
+        mensaje-inicio: "&6&l[Mercado] &eLlego la Feria del Reino: &a¡todo mas barato!"
+        mensaje-fin: "&6&l[Mercado] &7La Feria del Reino ha terminado."
+      escasez-hierro:
+        nombre: "&c&lEscasez de Hierro"
+        multiplicador: 1.60
+        duracion-minutos: 45
+        items: ["IRON_*", "RAW_IRON*"]
+        mensaje-inicio: "&6&l[Mercado] &cLas minas de hierro se derrumbaron: &ese dispara el precio del hierro."
+        mensaje-fin: "&6&l[Mercado] &7Las minas de hierro vuelven a operar."
+      guerra:
+        nombre: "&4&lGuerra en la Frontera"
+        multiplicador: 1.50
+        duracion-minutos: 40
+        items: ["*_SWORD", "*_AXE", "BOW", "CROSSBOW", "ARROW", "SHIELD", "*_HELMET", "*_CHESTPLATE", "*_LEGGINGS", "*_BOOTS"]
+        mensaje-inicio: "&6&l[Mercado] &4Estalla la guerra: &eel armamento sube de precio."
+        mensaje-fin: "&6&l[Mercado] &7La guerra termino y el armamento se normaliza."
+      cosecha:
+        nombre: "&a&lGran Cosecha"
+        multiplicador: 0.65
+        duracion-minutos: 40
+        items: ["WHEAT*", "BREAD", "CARROT*", "POTATO*", "BEETROOT*", "MELON*", "PUMPKIN*", "APPLE", "HAY_BLOCK"]
+        mensaje-inicio: "&6&l[Mercado] &aGran cosecha en los campos: &ela comida esta barata."
+        mensaje-fin: "&6&l[Mercado] &7Termina la temporada de cosecha."
+      hambruna:
+        nombre: "&c&lHambruna"
+        multiplicador: 1.70
+        duracion-minutos: 40
+        items: ["WHEAT*", "BREAD", "CARROT*", "POTATO*", "BEEF", "COOKED_*", "APPLE"]
+        mensaje-inicio: "&6&l[Mercado] &cHambruna en el reino: &ela comida esta carisima."
+        mensaje-fin: "&6&l[Mercado] &7La hambruna ha pasado."
+      fiebre-del-oro:
+        nombre: "&e&lFiebre del Oro"
+        multiplicador: 1.45
+        duracion-minutos: 35
+        items: ["GOLD_*", "RAW_GOLD*", "DIAMOND*", "EMERALD*"]
+        mensaje-inicio: "&6&l[Mercado] &eFiebre del oro: &elos metales preciosos se disparan."
+        mensaje-fin: "&6&l[Mercado] &7La fiebre del oro se enfria."
+
+# Anti-abuso (exploits). Todo esto solo afecta a los mercaderes con el mercado activo.
+antiabuso:
+  habilitado: true
+  # Unidades que un jugador puede COMPRAR y, aparte, VENDER de cada objeto por dia. 0 = sin limite.
+  limite-diario-por-objeto: 1024
+  # Cuanto puede mover UN jugador el precio de un objeto por hora (0.25 = como maximo +-25%). Evita
+  # inflar o hundir el precio comprando/vendiendo en bucle para luego aprovecharse. 0 = sin tope.
+  impacto-max-por-jugador-hora: 0.25
+  # Milisegundos minimos entre compras de un mismo jugador (0 = apagado; no lo pongas muy alto: el
+  # shift+click compra varias veces seguidas).
+  enfriamiento-ms: 0
+  # Lo que un mercader PAGA por un objeto nunca supera este % de lo que COBRA por el mismo objeto.
+  ratio-maximo-compra-venta: 0.9
+  # Si un jugador compra con el precio viejo (ventana abierta antes de un cambio) y es mas de este %
+  # mas barato que el actual, se cancela. -1 = apagado.
+  tolerancia-precio-obsoleto: 0.10
+  # Tope del multiplicador total (demanda x evento x stock).
+  multiplicador-maximo-total: 4.0
+
+# Stock: los mercaderes de ADMIN tienen existencias limitadas que se reponen con el tiempo.
+# Cuanto menos stock queda, mas sube el precio (como en Albion). Si se agota, no se puede comprar.
+# En ofertas donde el mercader COMPRA, el stock es lo que ya tiene: si esta lleno no compra mas.
+stock:
+  habilitado: true
+  maximo-por-oferta: 64      # unidades del objeto por oferta (por mercader se cambia en su panel)
+  reposicion-por-hora: 16    # unidades que se reponen cada hora
+  escasez-maxima: 1.0        # +100% de precio cuando queda muy poco (0 = el stock no afecta al precio)
+
+# Holograma sobre cada mercader con el mercado activo: "Pan 12 +20%". Rota si hay muchas ofertas.
+holograma:
+  habilitado: true
+  ofertas-por-pagina: 3
+  rotar-segundos: 5
+  altura-extra: 0.35
+  distancia-vision: 0.35    # 1.0 = distancia normal de entidades; menos = se ve de mas cerca
+
+banco:
+  habilitado: true
+  # 0 = sin limite. Saldo maximo en monedas base.
+  limite-saldo: 0
+  # true = el comando /banco funciona en cualquier lado (banco global). false = el banco solo
+  # se usa hablando con un mercader banquero (cada banquero tiene su propio banco y moneda).
+  permitir-comando-global: true
+  # Interes por hora (en %, ej 0.5 = 0.5%). 0 = desactivado.
+  interes-por-hora-porcentaje: 0.0
+  interes-maximo-por-hora: 1000
+  # Impuesto (%) que se cobra en las transferencias entre jugadores (/banco pagar).
+  impuesto-transferencia-porcentaje: 0.0
+
+rutas:
+  habilitado: true
+  # Pasos por segundo (bloques/segundo) al caminar. Maximo recomendado: 5
+  velocidad-bloques-por-segundo: 2.5
+  # Si la distancia es mayor que esto (o el chunk no esta cargado) se teletransporta directo.
+  distancia-maxima-caminando: 80
+  # Nodos maximos que explora el buscador de caminos.
+  nodos-maximos: 5000
+
+sonidos:
+  habilitado: true
+  volumen: 1.0
+  # Tip: para que no suenen dos sonidos al comprar, pon 'trade-succeeded-sound' vacio en
+  # plugins/Shopkeepers/config.yml
+
+# Mercaderes que duermen: con /ruta cama (parado en la cama) el mercader va a dormir de noche,
+# no atiende y por la manana vuelve a su ruta (o a su lugar de siempre). Horas del reloj de Minecraft.
+dormir:
+  habilitado: true
+  desde: "19:00"
+  hasta: "06:00"
+
+gui:
+  # Si true usa botones (CustomModelData sobre PAPER) y fondos del resourcepack medieval.
+  usar-resourcepack: false
+  usar-fondos: true
+  resourcepack:
+    # Opcional: enviar el resourcepack al entrar
+    enviar-al-entrar: false
+    url: ""
+    sha1: ""
+  titulos:
+    mercado: "&0Mercado del Reino"
+    grafica: "&0Grafica: {item}"
+    banco: "&0Banco del Reino"
+    categoria: "&0{categoria}"

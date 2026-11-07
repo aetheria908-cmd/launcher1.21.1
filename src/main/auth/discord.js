@@ -26,7 +26,7 @@ function waitForCode(port, state, signal) {
 }
 
 async function login(cfg, openBrowser, signal) {
-  if (!cfg.clientId) throw herr('DISCORD_CLIENT_ID_MISSING', 'Falta el Client ID de Discord (config/launcher.config.json → auth.discord.clientId). Mira docs/AUTENTICACION.md.');
+  if (!cfg.clientId) throw herr('DISCORD_CLIENT_ID_MISSING', 'Discord aún no está configurado: falta el Client ID. El administrador debe ponerlo en manifest/manifest.base.json (auth.discordClientId). Guía: docs/AUTENTICACION.md');
   const port = cfg.redirectPort || 53682;
   const redirect = `http://127.0.0.1:${port}/callback`;
   const verifier = b64u(crypto.randomBytes(48));

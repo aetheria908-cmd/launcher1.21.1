@@ -1,0 +1,16 @@
+{
+  "id": "razas-rpg",
+  "name": "Razas RPG",
+  "description": "Razas, objetos, GUI y animaciones (requiere OptiFine)",
+  "encrypted": true,
+  "packFile": "RAZAS_RPG_resourcepack.zip",
+  "plainSha256": "36c667a2fef3e022071de559df09ed528beeba2110b70891b55d306594e62e5c",
+  "plainSize": 27282448,
+  "packFormat": 34,
+  "requiresOptifine": true,
+  "priority": 10,
+  "external": true,
+  "url": "https://github.com/aetheria908-cmd/launcher1.21.1/releases/download/resources/RAZAS_RPG_resourcepack.aep",
+  "sha256": "7ff97465095a313d49607eeb49889edae92c1ac4d9b4fefbb7a8e0b78007e558",
+  "size": 27282480
+}

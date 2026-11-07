@@ -1,0 +1,49 @@
+name: ShopkeepersMedieval
+main: me.medieval.shops.MedievalPlugin
+version: '${version}'
+api-version: '1.21'
+description: Addon de Shopkeepers - mercado dinamico, banco, rutas, sonidos y resourcepack medieval.
+depend: [Shopkeepers]
+softdepend: [PlaceholderAPI]
+
+commands:
+    mercado:
+        description: Mercado del Reino (precios, demanda y graficas).
+        aliases: [market, precios]
+        usage: '/<command> [precio|grafica|eventos]'
+    mercadoadmin:
+        description: Administracion del mercado (eventos, demanda, tiendas dinamicas).
+        aliases: [madmin]
+        usage: '/<command> <evento|tienda|moneda|debug|demanda|info|reiniciar|recargar|guardar>'
+    banco:
+        description: Banco del Reino.
+        aliases: [bank]
+        usage: '/<command> [saldo|depositar|retirar|pagar]'
+    bancoadmin:
+        description: Administracion del banco.
+        aliases: [badmin]
+        usage: '/<command> <ver|dar|quitar|fijar|top|npc>'
+    ruta:
+        description: Rutas diarias de mercaderes.
+        aliases: [rutas, route]
+        usage: '/<command> <agregar|listar|quitar|limpiar|ir|estado>'
+
+permissions:
+    shopkeeper.market:
+        description: Ver el mercado, precios y graficas
+        default: true
+    shopkeeper.market.admin:
+        description: Administrar el mercado y sus eventos
+        default: op
+    shopkeeper.bank:
+        description: Usar el banco
+        default: true
+    shopkeeper.bank.admin:
+        description: Administrar el banco
+        default: op
+    shopkeeper.route:
+        description: Configurar rutas de mercaderes
+        default: op
+    shopkeeper.sleep.bypass:
+        description: Comerciar con mercaderes dormidos
+        default: op

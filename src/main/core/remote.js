@@ -51,7 +51,13 @@ function server() {
 }
 function urls() { return { ...bundled.urls, ...getManifest().urls }; }
 const brand = () => bundled.brand;
-const authConfig = () => bundled.auth;
+function authConfig() {
+  const a = getManifest().auth || {}, b = bundled.auth;
+  return {
+    microsoft: { clientId: a.microsoftClientId || b.microsoft.clientId },
+    discord: { ...b.discord, clientId: a.discordClientId || b.discord.clientId, guildId: a.discordGuildId || b.discord.guildId, tokenExchangeUrl: a.discordTokenExchangeUrl || b.discord.tokenExchangeUrl },
+  };
+}
 
 async function news(cacheDir) {
   const cache = path.join(cacheDir, 'news.json');

@@ -8,7 +8,8 @@ const SHA = /^[a-f0-9]{64}$/i;
 const HOST = /^(?=.{1,253}$)([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
 const MAX_SIZE = 2 * 1024 * 1024 * 1024;
 
-function httpsUrl(u) { try { return new URL(u).protocol === 'https:'; } catch { return false; } }
+// Solo https; http únicamente hacia la propia máquina (mismo criterio que core/http.js, útil para pruebas).
+function httpsUrl(u) { try { const x = new URL(u); return x.protocol === 'https:' || (x.protocol === 'http:' && (x.hostname === 'localhost' || x.hostname === '127.0.0.1')); } catch { return false; } }
 const str = (v, max = 500) => (typeof v === 'string' ? v.slice(0, max) : '');
 
 function resource(r, kinds, errors, where) {
@@ -27,7 +28,15 @@ function resource(r, kinds, errors, where) {
     out.priority = Number.isFinite(r.priority) ? r.priority : 0;
     out.packFormat = Number.isInteger(r.packFormat) ? r.packFormat : null;
     out.history = Array.isArray(r.history) ? r.history.slice(0, 50).map((h) => ({ version: str(h.version, 40), sha256: str(h.sha256, 64), date: str(h.date, 40) })) : [];
-    if (!/\.zip$/i.test(out.file)) errors.push(`${where}: los packs deben ser .zip`);
+    out.requiresOptifine = !!r.requiresOptifine;
+    out.encrypted = !!r.encrypted;
+    if (out.encrypted) {
+      out.packFile = str(r.packFile, 120);
+      out.plainSha256 = str(r.plainSha256, 64).toLowerCase();
+      if (!isSafeFileName(out.packFile) || !/\.zip$/i.test(out.packFile)) errors.push(`${where}: packFile inválido`);
+      if (!SHA.test(out.plainSha256)) errors.push(`${where}: plainSha256 inválido`);
+      if (!/\.aep$/i.test(out.file)) errors.push(`${where}: un pack cifrado debe ser .aep`);
+    } else if (!/\.zip$/i.test(out.file)) errors.push(`${where}: los packs deben ser .zip`);
   }
   return out;
 }
@@ -56,6 +65,14 @@ function validateManifest(m, appVersion = '0.0.0') {
   for (const [k, v] of Object.entries(m.urls || {})) {
     if (/^[a-z]{2,20}$/.test(k) && httpsUrl(v)) out.urls[k] = v; else errors.push(`urls.${k} inválida (debe ser https)`);
   }
+  out.auth = {};
+  const au = m.auth || {};
+  const authRules = [['microsoftClientId', /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i], ['discordClientId', /^\d{15,25}$/], ['discordGuildId', /^\d{15,25}$/]];
+  for (const [k, re] of authRules) {
+    if (au[k] === undefined || au[k] === '') continue;
+    if (re.test(String(au[k]))) out.auth[k] = String(au[k]); else errors.push(`auth.${k} no tiene un formato válido`);
+  }
+  if (au.discordTokenExchangeUrl) { if (httpsUrl(au.discordTokenExchangeUrl)) out.auth.discordTokenExchangeUrl = au.discordTokenExchangeUrl; else errors.push('auth.discordTokenExchangeUrl debe ser https'); }
   out.newsUrl = m.newsUrl && httpsUrl(m.newsUrl) ? m.newsUrl : '';
   out.maintenance = { enabled: !!(m.maintenance && m.maintenance.enabled), message: str(m.maintenance && m.maintenance.message, 400) };
   out.launcher = { minVersion: str(m.launcher && m.launcher.minVersion, 20) || '0.0.0', message: str(m.launcher && m.launcher.message, 300) };
@@ -65,7 +82,14 @@ function validateManifest(m, appVersion = '0.0.0') {
   const seen = new Set();
   (Array.isArray(m.resourcepacks) ? m.resourcepacks : []).forEach((r, i) => {
     const p = resource(r, 'pack', errors, `resourcepacks[${i}]`);
-    if (p) { if (seen.has(p.id)) errors.push('id duplicado: ' + p.id); seen.add(p.id); out.resourcepacks.push(p); }
+    if (p) {
+      if (seen.has(p.id)) errors.push('id duplicado: ' + p.id);
+      seen.add(p.id);
+      const gf = (p.packFile || p.file).toLowerCase();
+      if (seen.has('f:' + gf)) errors.push('nombre de archivo duplicado en resourcepacks: ' + gf);
+      seen.add('f:' + gf);
+      out.resourcepacks.push(p);
+    }
   });
   out.media = { music: [], videos: [], images: [] };
   for (const k of Object.keys(out.media)) {

@@ -1,0 +1,515 @@
+# Generado por tools/gen_layouts.py - no editar a mano
+menus:
+  main:
+    rows: 6
+    title: TU GREMIO
+    grid: []
+    cells: [4]
+    plaques:
+      miembros: {x: 0, y: 1, w: 3, h: 1, label: MIEMBROS, color: green, icon: people,
+        mat: PLAYER_HEAD}
+      banco: {x: 3, y: 1, w: 3, h: 1, label: BANCO, color: gold, icon: coin, mat: GOLD_INGOT}
+      mejoras: {x: 6, y: 1, w: 3, h: 1, label: MEJORAS, color: blue, icon: up, mat: ANVIL}
+      guerra: {x: 0, y: 2, w: 3, h: 1, label: GUERRA, color: red, icon: swords, mat: IRON_SWORD}
+      territorio: {x: 3, y: 2, w: 3, h: 1, label: TERRITORIO, color: green, icon: tower,
+        mat: GRASS_BLOCK}
+      alianzas: {x: 6, y: 2, w: 3, h: 1, label: ALIANZAS, color: purple, icon: banner,
+        mat: WHITE_BANNER}
+      impuestos: {x: 0, y: 3, w: 3, h: 1, label: IMPUESTOS, color: orange, icon: scroll,
+        mat: BOOK}
+      ranking: {x: 3, y: 3, w: 3, h: 1, label: RANKING, color: gold, icon: star, mat: NETHER_STAR}
+      mapa: {x: 6, y: 3, w: 3, h: 1, label: TERRITORIOS, color: cyan, icon: map, mat: MAP}
+      solicitudes: {x: 0, y: 4, w: 3, h: 1, label: SOLICITUDES, color: blue, icon: scroll,
+        mat: WRITABLE_BOOK}
+      invitar: {x: 3, y: 4, w: 3, h: 1, label: INVITAR, color: green, icon: plus,
+        mat: LEAD}
+      obras: {x: 6, y: 4, w: 3, h: 1, label: OBRAS, color: orange, icon: hammer, mat: BRICKS}
+      salir: {x: 0, y: 5, w: 3, h: 1, label: SALIR, color: red, icon: door, mat: OAK_DOOR}
+      misiones: {x: 3, y: 5, w: 3, h: 1, label: MISIONES, color: gold, icon: scroll,
+        mat: WRITABLE_BOOK}
+      cerrar: {x: 6, y: 5, w: 3, h: 1, label: CERRAR, color: gray, icon: x, mat: BARRIER}
+  singremio:
+    rows: 6
+    title: SIN GREMIO
+    grid: []
+    cells: []
+    plaques:
+      gremios: {x: 1, y: 1, w: 3, h: 2, label: GREMIOS, color: blue, icon: shield,
+        mat: SHIELD}
+      invitaciones: {x: 5, y: 1, w: 3, h: 2, label: INVITACIONES, color: green, icon: scroll,
+        mat: WRITABLE_BOOK}
+      territorios: {x: 1, y: 3, w: 3, h: 1, label: TERRITORIOS, color: cyan, icon: map,
+        mat: MAP}
+      cerrar: {x: 5, y: 3, w: 3, h: 1, label: CERRAR, color: red, icon: x, mat: BARRIER}
+  fundar:
+    rows: 6
+    title: FUNDA TU GREMIO
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      gremios: {x: 7, y: 5, w: 2, h: 1, label: GREMIOS, color: blue, icon: shield,
+        mat: SHIELD}
+  miembros:
+    rows: 6
+    title: MIEMBROS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      invitar: {x: 7, y: 5, w: 2, h: 1, label: INVITAR, color: green, icon: plus,
+        mat: LEAD}
+  miembro_accion:
+    rows: 6
+    title: GESTIONAR MIEMBRO
+    grid: []
+    cells: [4]
+    plaques:
+      ascender: {x: 1, y: 1, w: 3, h: 1, label: ASCENDER, color: green, icon: up,
+        mat: EMERALD}
+      degradar: {x: 5, y: 1, w: 3, h: 1, label: DEGRADAR, color: orange, icon: down,
+        mat: COPPER_INGOT}
+      expulsar: {x: 1, y: 3, w: 3, h: 1, label: EXPULSAR, color: red, icon: x, mat: BARRIER}
+      lider: {x: 5, y: 3, w: 3, h: 1, label: NUEVO LIDER, color: gold, icon: crown,
+        mat: GOLDEN_HELMET}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  solicitudes:
+    rows: 6
+    title: SOLICITUDES
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  invitar:
+    rows: 6
+    title: INVITAR JUGADORES
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  banco:
+    rows: 6
+    title: BANCO DEL GREMIO
+    grid: []
+    cells: [4]
+    plaques:
+      dep1: {x: 0, y: 2, w: 2, h: 1, label: '+1', color: green, icon: '', mat: LIME_DYE}
+      dep10: {x: 2, y: 2, w: 2, h: 1, label: '+10', color: green, icon: '', mat: LIME_DYE}
+      dep64: {x: 4, y: 2, w: 2, h: 1, label: '+64', color: green, icon: '', mat: LIME_DYE}
+      depall: {x: 6, y: 2, w: 3, h: 1, label: DEPOSITAR TODO, color: green, icon: coin,
+        mat: EMERALD_BLOCK}
+      ret1: {x: 0, y: 3, w: 2, h: 1, label: '-1', color: red, icon: '', mat: RED_DYE}
+      ret10: {x: 2, y: 3, w: 2, h: 1, label: '-10', color: red, icon: '', mat: RED_DYE}
+      ret64: {x: 4, y: 3, w: 2, h: 1, label: '-64', color: red, icon: '', mat: RED_DYE}
+      retall: {x: 6, y: 3, w: 3, h: 1, label: RETIRAR TODO, color: red, icon: coin,
+        mat: REDSTONE_BLOCK}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  mejoras:
+    rows: 6
+    title: MEJORAS
+    grid: []
+    cells: [4]
+    plaques:
+      territorio_up: {x: 0, y: 1, w: 4, h: 3, label: MEJORAR TERRITORIO, color: gold,
+        icon: tower, mat: BEACON}
+      guardia: {x: 5, y: 1, w: 4, h: 1, label: GUARDIA, color: green, icon: shield,
+        mat: IRON_CHESTPLATE}
+      nucleo: {x: 5, y: 2, w: 4, h: 1, label: NUCLEO, color: blue, icon: crystal,
+        mat: END_CRYSTAL}
+      capacidad: {x: 5, y: 3, w: 4, h: 1, label: CAPACIDAD, color: purple, icon: people,
+        mat: PLAYER_HEAD}
+      bandera: {x: 0, y: 4, w: 4, h: 1, label: BANDERA, color: purple, icon: banner,
+        mat: WHITE_BANNER}
+      torres: {x: 5, y: 4, w: 4, h: 1, label: TORRES, color: orange, icon: tower,
+        mat: CROSSBOW}
+      reino: {x: 6, y: 5, w: 3, h: 1, label: REINO, color: gold, icon: crown, mat: GOLDEN_HELMET}
+      volver: {x: 0, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  impuestos:
+    rows: 6
+    title: IMPUESTOS
+    grid: []
+    cells: [4]
+    plaques:
+      pagar: {x: 0, y: 2, w: 4, h: 1, label: PAGAR MI CUOTA, color: green, icon: coin,
+        mat: GOLD_INGOT}
+      cuota_mas: {x: 5, y: 2, w: 2, h: 1, label: CUOTA +, color: orange, icon: up,
+        mat: LIME_DYE}
+      cuota_menos: {x: 7, y: 2, w: 2, h: 1, label: CUOTA -, color: orange, icon: down,
+        mat: RED_DYE}
+      mant: {x: 0, y: 3, w: 4, h: 1, label: PAGAR MANTENIMIENTO, color: gold, icon: scroll,
+        mat: CLOCK}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  guerra:
+    rows: 6
+    title: MAPA DE GUERRA
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      estado: {x: 7, y: 5, w: 2, h: 1, label: MI ASEDIO, color: red, icon: swords,
+        mat: IRON_SWORD}
+  taller:
+    rows: 6
+    title: TALLER DE ASEDIO
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  obras:
+    rows: 6
+    title: MAESTRO DE OBRAS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49, 40]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      todo: {x: 7, y: 5, w: 2, h: 1, label: REPARAR TODO, color: orange, icon: hammer,
+        mat: ANVIL}
+  alianzas:
+    rows: 6
+    title: ALIANZAS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  ranking:
+    rows: 6
+    title: RANKING DE GREMIOS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  territorios:
+    rows: 6
+    title: MAPA DE TERRITORIOS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  confirmar:
+    rows: 6
+    title: CONFIRMAR
+    grid: []
+    cells: [4]
+    plaques:
+      si: {x: 1, y: 3, w: 3, h: 1, label: CONFIRMAR, color: green, icon: check, mat: LIME_CONCRETE}
+      'no': {x: 5, y: 3, w: 3, h: 1, label: CANCELAR, color: red, icon: x, mat: RED_CONCRETE}
+  admin:
+    rows: 6
+    title: ADMINISTRACION
+    grid: []
+    cells: []
+    plaques:
+      terr: {x: 1, y: 1, w: 3, h: 2, label: TERRITORIOS, color: cyan, icon: map, mat: MAP}
+      raids: {x: 5, y: 1, w: 3, h: 2, label: RAIDS, color: red, icon: swords, mat: IRON_SWORD}
+      gremios: {x: 1, y: 3, w: 3, h: 1, label: GREMIOS, color: blue, icon: shield,
+        mat: SHIELD}
+      cerrar: {x: 5, y: 3, w: 3, h: 1, label: CERRAR, color: gray, icon: x, mat: BARRIER}
+      eventos: {x: 1, y: 4, w: 3, h: 1, label: EVENTOS, color: gold, icon: crown,
+        mat: GOLDEN_HELMET}
+      zonas: {x: 5, y: 4, w: 3, h: 1, label: ZONAS, color: green, icon: hammer, mat: IRON_PICKAXE}
+      discord: {x: 3, y: 5, w: 3, h: 1, label: DISCORD, color: blue, icon: star, mat: NETHER_STAR}
+  admin_terr:
+    rows: 6
+    title: TERRITORIOS (ADMIN)
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  admin_raids:
+    rows: 6
+    title: RAIDS ACTIVOS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  bandera:
+    rows: 6
+    title: BANDERA DEL GREMIO
+    grid: []
+    cells: [4]
+    plaques:
+      usar: {x: 0, y: 2, w: 4, h: 1, label: USAR MI BANDERA, color: green, icon: banner,
+        mat: WHITE_BANNER}
+      quitar: {x: 5, y: 2, w: 4, h: 1, label: QUITAR, color: red, icon: x, mat: BARRIER}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  torres:
+    rows: 6
+    title: TORRES DE BALLESTA
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49, 40]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      comprar: {x: 7, y: 5, w: 2, h: 1, label: COMPRAR, color: green, icon: plus,
+        mat: CROSSBOW}
+  admin_eventos:
+    rows: 6
+    title: EVENTOS (ADMIN)
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      nuevo: {x: 7, y: 5, w: 2, h: 1, label: NUEVO, color: green, icon: plus, mat: NETHER_STAR}
+  misiones:
+    rows: 6
+    title: MISIONES DE GREMIO
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  admin_zonas:
+    rows: 6
+    title: ZONAS DE RECURSOS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      nuevo: {x: 7, y: 5, w: 2, h: 1, label: NUEVA, color: green, icon: plus, mat: NETHER_STAR}
+  zona_edit:
+    rows: 6
+    title: EDITAR ZONA
+    grid: []
+    cells: [4]
+    plaques:
+      area: {x: 0, y: 1, w: 3, h: 1, label: AREA, color: cyan, icon: map, mat: MAP}
+      npc: {x: 3, y: 1, w: 3, h: 1, label: ALDEANO, color: green, icon: people, mat: VILLAGER_SPAWN_EGG}
+      recurso: {x: 6, y: 1, w: 3, h: 1, label: RECURSO, color: gold, icon: plus, mat: IRON_INGOT}
+      limpiar: {x: 0, y: 2, w: 3, h: 1, label: QUITAR, color: red, icon: x, mat: BARRIER}
+      cada: {x: 3, y: 2, w: 3, h: 1, label: CADA, color: blue, icon: scroll, mat: CLOCK}
+      capacidad: {x: 6, y: 2, w: 3, h: 1, label: CAPACIDAD, color: purple, icon: up,
+        mat: CHEST}
+      captura: {x: 0, y: 3, w: 3, h: 1, label: CAPTURA, color: orange, icon: swords,
+        mat: IRON_SWORD}
+      tipo: {x: 3, y: 3, w: 3, h: 1, label: TIPO, color: gold, icon: hammer, mat: IRON_PICKAXE}
+      liberar: {x: 6, y: 3, w: 3, h: 1, label: LIBERAR, color: cyan, icon: door, mat: OAK_DOOR}
+      volver: {x: 0, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      borrar: {x: 6, y: 5, w: 3, h: 1, label: BORRAR, color: red, icon: x, mat: BARRIER}
+  evento_edit:
+    rows: 6
+    title: EDITAR EVENTO
+    grid: []
+    cells: [4]
+    plaques:
+      tipo: {x: 0, y: 1, w: 3, h: 1, label: TIPO, color: gold, icon: crown, mat: GOLDEN_HELMET}
+      zona: {x: 3, y: 1, w: 3, h: 1, label: ZONA, color: cyan, icon: map, mat: MAP}
+      duracion: {x: 6, y: 1, w: 3, h: 1, label: DURACION, color: blue, icon: scroll,
+        mat: CLOCK}
+      mantener: {x: 0, y: 2, w: 3, h: 1, label: MANTENER, color: orange, icon: tower,
+        mat: BEACON}
+      xp: {x: 3, y: 2, w: 3, h: 1, label: XP, color: green, icon: star, mat: EXPERIENCE_BOTTLE}
+      coronas: {x: 6, y: 2, w: 3, h: 1, label: CORONAS, color: gold, icon: coin, mat: GOLD_INGOT}
+      cada: {x: 0, y: 3, w: 3, h: 1, label: FRECUENCIA, color: purple, icon: scroll,
+        mat: CLOCK}
+      nivel: {x: 3, y: 3, w: 3, h: 1, label: NIVEL MIN, color: blue, icon: up, mat: ANVIL}
+      gremios: {x: 6, y: 3, w: 3, h: 1, label: GREMIOS, color: cyan, icon: people,
+        mat: PLAYER_HEAD}
+      jefe: {x: 0, y: 4, w: 3, h: 1, label: JEFE, color: red, icon: swords, mat: WITHER_SKELETON_SKULL}
+      iniciar: {x: 3, y: 4, w: 3, h: 1, label: INICIAR, color: green, icon: check,
+        mat: LIME_CONCRETE}
+      parar: {x: 6, y: 4, w: 3, h: 1, label: PARAR, color: red, icon: x, mat: RED_CONCRETE}
+      volver: {x: 0, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      borrar: {x: 3, y: 5, w: 3, h: 1, label: BORRAR, color: red, icon: x, mat: BARRIER}
+      estado: {x: 6, y: 5, w: 3, h: 1, label: ACTIVO, color: orange, icon: shield,
+        mat: SHIELD}
+  hub:
+    rows: 6
+    title: MAS FUNCIONES
+    grid: []
+    cells: [4]
+    plaques:
+      claims: {x: 0, y: 1, w: 3, h: 1, label: MAPA Y CLAIMS, color: cyan, icon: map,
+        mat: MAP}
+      diplomacia: {x: 3, y: 1, w: 3, h: 1, label: DIPLOMACIA, color: purple, icon: banner,
+        mat: WHITE_BANNER}
+      guardias: {x: 6, y: 1, w: 3, h: 1, label: GUARDIAS, color: green, icon: shield,
+        mat: IRON_CHESTPLATE}
+      vasallaje: {x: 0, y: 2, w: 3, h: 1, label: VASALLAJE, color: gold, icon: crown,
+        mat: GOLDEN_HELMET}
+      mercado: {x: 3, y: 2, w: 3, h: 1, label: MERCADO, color: orange, icon: coin,
+        mat: EMERALD}
+      arbol: {x: 6, y: 2, w: 3, h: 1, label: ARBOL, color: blue, icon: star, mat: NETHER_STAR}
+      tutorial: {x: 0, y: 3, w: 3, h: 1, label: GUIA, color: gray, icon: scroll, mat: BOOK}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  claims_mapa:
+    rows: 6
+    title: MAPA DE CLAIMS
+    grid: []
+    cells: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+      20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+      39, 40, 41, 42, 43, 44]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      chat: {x: 7, y: 5, w: 2, h: 1, label: EN CHAT, color: cyan, icon: scroll, mat: PAPER}
+  diplomacia:
+    rows: 6
+    title: DIPLOMACIA
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  relacion:
+    rows: 6
+    title: RELACION
+    grid: []
+    cells: [4]
+    plaques:
+      aliado: {x: 0, y: 1, w: 4, h: 1, label: ALIANZA, color: green, icon: banner,
+        mat: WHITE_BANNER}
+      enemigo: {x: 5, y: 1, w: 4, h: 1, label: DECLARAR GUERRA, color: red, icon: swords,
+        mat: IRON_SWORD}
+      tregua: {x: 0, y: 2, w: 4, h: 1, label: PROPONER TREGUA, color: blue, icon: scroll,
+        mat: CLOCK}
+      paz: {x: 5, y: 2, w: 4, h: 1, label: PAZ / NEUTRAL, color: gray, icon: door,
+        mat: OAK_DOOR}
+      refuerzos: {x: 0, y: 3, w: 4, h: 1, label: PEDIR REFUERZOS, color: orange, icon: shield,
+        mat: SHIELD}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  guardias:
+    rows: 6
+    title: GUARDIAS
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49, 40]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      contratar: {x: 7, y: 5, w: 2, h: 1, label: CONTRATAR, color: green, icon: plus,
+        mat: IRON_SWORD}
+  vasallaje:
+    rows: 6
+    title: VASALLAJE
+    grid: []
+    cells: [4]
+    plaques:
+      ofrecer: {x: 0, y: 1, w: 4, h: 1, label: OFRECER PROTECCION, color: gold, icon: crown,
+        mat: GOLDEN_HELMET}
+      aceptar: {x: 5, y: 1, w: 4, h: 1, label: ACEPTAR OFERTA, color: green, icon: check,
+        mat: LIME_CONCRETE}
+      liberar: {x: 0, y: 2, w: 4, h: 1, label: LIBERARME, color: red, icon: door,
+        mat: OAK_DOOR}
+      soltar: {x: 5, y: 2, w: 4, h: 1, label: SOLTAR VASALLO, color: orange, icon: x,
+        mat: BARRIER}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  mercado:
+    rows: 6
+    title: MERCADO
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49, 40]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      vender: {x: 7, y: 5, w: 2, h: 1, label: VENDER, color: green, icon: plus, mat: GOLD_INGOT}
+      reclamar: {x: 0, y: 4, w: 3, h: 1, label: RECLAMAR, color: gold, icon: coin,
+        mat: CHEST}
+      mios: {x: 3, y: 4, w: 3, h: 1, label: MIS VENTAS, color: blue, icon: scroll,
+        mat: WRITABLE_BOOK}
+  arbol:
+    rows: 6
+    title: ARBOL DE MEJORAS
+    grid: []
+    cells: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+      20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+      39, 40, 41, 42, 43, 44, 49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      reset: {x: 7, y: 5, w: 2, h: 1, label: REINICIAR, color: red, icon: x, mat: BARRIER}
+  tutorial:
+    rows: 6
+    title: GUIA DEL GREMIO
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+      libro: {x: 7, y: 5, w: 2, h: 1, label: LIBRO, color: gold, icon: scroll, mat: WRITTEN_BOOK}
+  municion:
+    rows: 6
+    title: MUNICION DE LA TORRE
+    grid: []
+    cells: [4]
+    plaques:
+      m0: {x: 0, y: 1, w: 4, h: 1, label: REFORZADA, color: gray, icon: swords, mat: ARROW}
+      m1: {x: 5, y: 1, w: 4, h: 1, label: VENENO, color: green, icon: swords, mat: SPIDER_EYE}
+      m2: {x: 0, y: 2, w: 4, h: 1, label: FUEGO, color: orange, icon: swords, mat: BLAZE_POWDER}
+      m3: {x: 5, y: 2, w: 4, h: 1, label: ESCARCHA, color: cyan, icon: swords, mat: SNOWBALL}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+  reino:
+    rows: 6
+    title: MEJORAS DEL REINO
+    grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+    cells: [49]
+    plaques:
+      volver: {x: 0, y: 5, w: 2, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}
+      prev: {x: 3, y: 5, w: 1, h: 1, label: '', color: gray, icon: left, mat: ARROW}
+      next: {x: 5, y: 5, w: 1, h: 1, label: '', color: gray, icon: right, mat: ARROW}
+  discord:
+    rows: 6
+    title: DISCORD
+    grid: []
+    cells: [4]
+    plaques:
+      t0: {x: 0, y: 1, w: 4, h: 1, label: ASEDIOS, color: red, icon: swords, mat: IRON_SWORD}
+      t1: {x: 5, y: 1, w: 4, h: 1, label: EVENTOS, color: gold, icon: crown, mat: GOLDEN_HELMET}
+      t2: {x: 0, y: 2, w: 4, h: 1, label: GREMIOS, color: blue, icon: shield, mat: SHIELD}
+      t3: {x: 5, y: 2, w: 4, h: 1, label: ALIANZAS, color: green, icon: plus, mat: EMERALD}
+      t4: {x: 0, y: 3, w: 4, h: 1, label: RANKING, color: purple, icon: star, mat: NETHER_STAR}
+      t5: {x: 5, y: 3, w: 4, h: 1, label: SERVIDOR, color: cyan, icon: map, mat: COMPASS}
+      probar: {x: 3, y: 4, w: 3, h: 1, label: PROBAR, color: orange, icon: scroll,
+        mat: PAPER}
+      volver: {x: 3, y: 5, w: 3, h: 1, label: VOLVER, color: gray, icon: back, mat: ARROW}

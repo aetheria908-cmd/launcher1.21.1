@@ -1,0 +1,12 @@
+{
+  "id": "gremios-gui",
+  "name": "Gremios GUI",
+  "description": "Menús de gremios y asedios",
+  "encrypted": true,
+  "packFile": "GremiosGUI-ResourcePack.zip",
+  "plainSha256": "464de4ee72e71cf0fe4e426c850a6afaabd1caf62dded4239a820208937cc6a3",
+  "plainSize": 2961595,
+  "packFormat": 34,
+  "requiresOptifine": false,
+  "priority": 5
+}

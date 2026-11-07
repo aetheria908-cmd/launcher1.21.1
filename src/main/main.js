@@ -48,11 +48,16 @@ function handle(ch, fn) {
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 1180, height: 720, minWidth: 960, minHeight: 600, frame: false, backgroundColor: '#0c0a10', show: false, title: remote.brand().name,
+    width: 1180, height: 720, minWidth: 1000, minHeight: 660, frame: false, backgroundColor: '#0c0a10', show: false, title: remote.brand().name,
     icon: path.join(paths.appDir(), 'build', 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true, autoplayPolicy: 'no-user-gesture-required' },
   });
   win.once('ready-to-show', () => win.show());
+  // Diagnóstico: errores de la interfaz al registro; F12 o Ctrl+Mayús+I abren las herramientas de desarrollo.
+  win.webContents.on('console-message', (e, level, message, line, source) => { if ((level >= 2 || (e && e.level === 'error')) ) log.warn(`[interfaz] ${message || (e && e.message)} (${source || (e && e.sourceId)}:${line || (e && e.lineNumber)})`); });
+  win.webContents.on('preload-error', (_e, p, err) => log.error('Error en preload ' + p + ': ' + (err && err.stack)));
+  win.webContents.on('render-process-gone', (_e, d) => log.error('La interfaz se cerró: ' + d.reason));
+  win.webContents.on('before-input-event', (ev, input) => { if (input.type === 'keyDown' && (input.key === 'F12' || (input.control && input.shift && String(input.key).toLowerCase() === 'i'))) win.webContents.toggleDevTools(); });
   win.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
   win.webContents.setWindowOpenHandler(({ url }) => { try { openExternal(url); } catch { /* ignorar */ } return { action: 'deny' }; });
   win.webContents.on('will-navigate', (e, url) => { if (!url.startsWith('file:')) e.preventDefault(); });
@@ -122,7 +127,7 @@ function registerHandlers() {
     return r.canceled ? null : r.filePaths[0];
   });
 
-  handle('game:play', () => game.play(emit));
+  handle('game:play', (opts) => game.play(emit, opts));
   handle('game:update', () => game.update(emit, false));
   handle('game:repair', () => game.update(emit, true));
   handle('task:cancel', () => game.cancel());
@@ -131,12 +136,13 @@ function registerHandlers() {
   handle('game:open-logs', () => shell.showItemInFolder(log.file()));
   handle('game:open-screenshots', () => { const d = path.join(paths.game(), 'screenshots'); fs.mkdirSync(d, { recursive: true }); return shell.openPath(d); });
 
-  const plist = (deep) => packs.list({ manifest: R.getManifest(), settings: settings.get(), paths, deep });
+  const plist = (deep) => packs.list({ manifest: R.getManifest(), settings: settings.get(), paths, deep, ctx: game.optiCtx() });
   handle('packs:list', () => plist(false));
   handle('packs:install', async (id) => { await game.packInstall(emit, id, true); return plist(false); });
   handle('packs:uninstall', async (id) => { await game.packInstall(emit, id, false); return plist(false); });
   handle('packs:toggle', (id, on) => { game.packToggle(id, on); return plist(false); });
   handle('packs:priority', (id, d) => { game.packPriority(id, d); return plist(false); });
+  handle('packs:active', () => packs.activeInOptions(paths, R.getManifest()));
   handle('packs:verify', async () => {
     const before = await plist(true);
     if (before.some((p) => p.corrupt || p.outdated)) await game.packRepair(emit);
@@ -191,6 +197,7 @@ app.whenReady().then(() => {
   store.init(paths.userData());
   remote.loadBundled(paths.appDir());
   game.setVersion(app.getVersion());
+  game.cleanup(); // por si el launcher se cerró mal y quedó algún pack privado descifrado
   Menu.setApplicationMenu(null);
   registerHandlers();
   createWindow();

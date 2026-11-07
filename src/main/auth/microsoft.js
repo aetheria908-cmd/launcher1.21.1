@@ -16,7 +16,7 @@ const XERR = {
 };
 
 async function startDeviceCode(clientId, signal) {
-  if (!clientId) throw herr('MS_CLIENT_ID_MISSING', 'Falta el Client ID de Microsoft (config/launcher.config.json → auth.microsoft.clientId). Mira docs/AUTENTICACION.md.');
+  if (!clientId) throw herr('MS_CLIENT_ID_MISSING', 'El inicio de sesión de Microsoft aún no está configurado: falta el Client ID. El administrador debe ponerlo en manifest/manifest.base.json (auth.microsoftClientId). Guía: docs/AUTENTICACION.md');
   const r = await fetchJson(`${TENANT}/devicecode`, { method: 'POST', form: { client_id: clientId, scope: SCOPE }, signal });
   if (r.status !== 200 || !r.json) throw herr('MS_DEVICECODE', 'Microsoft rechazó el inicio de sesión: ' + ((r.json && r.json.error_description) || r.status));
   return r.json; // { user_code, device_code, verification_uri, expires_in, interval }

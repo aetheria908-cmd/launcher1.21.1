@@ -8,7 +8,7 @@ const { ensureFiles } = require('./files');
 const log = require('./logger');
 
 // Índice oficial de runtimes de Java que publica Mojang.
-const RUNTIME_INDEX = 'https://launchermeta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json';
+const RUNTIME_INDEX = process.env.AETHERIA_TEST_RUNTIME_INDEX || 'https://launchermeta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json';
 const platform = () => (process.arch === 'ia32' ? 'windows-x86' : process.arch === 'arm64' ? 'windows-arm64' : 'windows-x64');
 
 async function ensureManaged({ component, runtimeDir, cacheDir, progress, signal, full }) {

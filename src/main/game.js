@@ -39,6 +39,13 @@ async function withTask(kind, emit, fn) {
 }
 const cancel = () => { if (current) current.controller.abort(); };
 
+// Contexto de OptiFine: los packs que lo requieren solo se instalan/activan si se juega con OptiFine ya instalado.
+function optiCtx() {
+  const s = settings.get();
+  return { optifine: s.profile === 'optifine' && optifine.installed(paths.game(), remote.server().minecraftVersion).length > 0 };
+}
+const cleanup = () => { try { packs.cleanupPrivate(remote.getManifest(), paths); } catch (e) { log.warn('Limpieza de packs privados: ' + e.message); } };
+
 function ramFor(s) {
   const total = Math.floor(os.totalmem() / 1048576);
   return s.ram.auto ? util.autoRam(total) : util.clampRam(s.ram, total);
@@ -56,7 +63,7 @@ async function prepare(signal, progress, full = false) {
   const ver = remote.server().minecraftVersion;
   const { version } = await minecraft.installGame({ versionId: ver, gameDir: paths.game(), progress, signal, full });
   const javaExe = await javaMod.resolveJava({ settings: s, javaVersion: version.javaVersion, runtimeDir: paths.runtime(), cacheDir: paths.cache(), progress, signal, full });
-  const packRes = await packs.sync({ manifest: man, settings: s, paths, progress, signal });
+  const packRes = await packs.sync({ manifest: man, settings: s, paths, progress, signal, ctx: optiCtx() });
   try { await media.sync({ manifest: man, settings: s, paths, progress, signal }); } catch (e) { if (e.code === 'ABORTED') throw e; log.warn('Multimedia: ' + e.message); }
   return { javaExe, packRes, version };
 }
@@ -66,7 +73,8 @@ function gate(man) {
   if (man.maintenance.enabled) throw herr('MAINTENANCE', man.maintenance.message || 'El servidor está en mantenimiento.');
 }
 
-function play(emit) {
+function play(emit, opts = {}) {
+  const test = !!(opts && opts.test); // modo prueba: abre Minecraft sin conectarse al servidor
   return withTask('play', emit, async (signal, progress) => {
     emit('game:state', { state: 'preparing' });
     try {
@@ -78,7 +86,7 @@ function play(emit) {
       const { javaExe, packRes, version } = await prepare(signal, progress);
       progress.setPhase('launch', 'Preparando la instancia…');
       const s = settings.get();
-      packs.applyToOptions({ manifest: man, settings: s, paths });
+      packs.applyToOptions({ manifest: man, settings: s, paths, ctx: optiCtx() });
       let versionId = version.id;
       if (s.profile === 'optifine') {
         const list = optifine.installed(paths.game(), version.id);
@@ -86,11 +94,12 @@ function play(emit) {
         versionId = list.includes(s.optifineVersion) ? s.optifineVersion : list[list.length - 1];
       }
       const srv = remote.server();
-      const cmd = launch.buildCommand({ versionId, gameDir: paths.game(), javaExe, auth, settings: s, ramMb: ramFor(s), server: s.joinServer ? { host: srv.address, port: srv.port } : null, launcherVersion: appVersion });
+      const cmd = launch.buildCommand({ versionId, gameDir: paths.game(), javaExe, auth, settings: s, ramMb: ramFor(s), server: s.joinServer && !test ? { host: srv.address, port: srv.port } : null, launcherVersion: appVersion });
       if (cmd.rejectedJvm.length) emit('toast', { kind: 'warn', text: 'Argumentos JVM ignorados por seguridad: ' + cmd.rejectedJvm.join(' ') });
       child = launch.run(cmd, {
         onExit: (code, tail) => {
           child = null;
+          cleanup(); // los packs privados no se quedan descifrados en disco
           emit('game:state', { state: 'idle' });
           log.info('Minecraft terminó con código ' + code);
           if (code !== 0) emit('game:crash', { code, tail: tail.slice(-25) });
@@ -98,7 +107,7 @@ function play(emit) {
       });
       emit('game:state', { state: 'running' });
       return { pid: child.pid, auth: auth.type };
-    } catch (e) { emit('game:state', { state: 'idle' }); throw e; }
+    } catch (e) { cleanup(); emit('game:state', { state: 'idle' }); throw e; }
   });
 }
 
@@ -107,8 +116,10 @@ function update(emit, full = false) {
   return withTask(full ? 'repair' : 'update', emit, async (signal, progress) => {
     progress.setPhase('manifest', 'Comprobando actualizaciones…');
     gate0(await refreshRemote(signal));
-    const r = await prepare(signal, progress, full);
-    return { changedPacks: r.packRes.changed, issues: r.packRes.issues };
+    try {
+      const r = await prepare(signal, progress, full);
+      return { changedPacks: r.packRes.changed, issues: r.packRes.issues };
+    } finally { cleanup(); }
   });
 }
 function gate0(man) { if (man.needsLauncherUpdate) log.warn('Actualización obligatoria del launcher pendiente'); }
@@ -123,10 +134,10 @@ function packInstall(emit, id, on) {
   const s = settings.get();
   const op = { ...(s.optionalPacks[id] || {}), installed: on, enabled: on ? true : false };
   settings.patch({ optionalPacks: { [id]: op } });
-  return withTask('packs', emit, async (signal, progress) => { await packs.sync({ manifest: remote.getManifest(), settings: settings.get(), paths, progress, signal }); });
+  return withTask('packs', emit, async (signal, progress) => { try { await packs.sync({ manifest: remote.getManifest(), settings: settings.get(), paths, progress, signal, ctx: optiCtx() }); } finally { cleanup(); } });
 }
 function packRepair(emit) {
-  return withTask('packs', emit, async (signal, progress) => packs.sync({ manifest: remote.getManifest(), settings: settings.get(), paths, progress, signal }));
+  return withTask('packs', emit, async (signal, progress) => { try { return await packs.sync({ manifest: remote.getManifest(), settings: settings.get(), paths, progress, signal, ctx: optiCtx() }); } finally { cleanup(); } });
 }
 function packToggle(id, enabled) { const s = settings.get(); settings.patch({ optionalPacks: { [id]: { ...(s.optionalPacks[id] || { installed: true }), enabled: !!enabled } } }); }
 function packPriority(id, delta) {
@@ -152,7 +163,7 @@ function optifineInstall(emit, jar) {
   return withTask('optifine', emit, async (signal, progress) => {
     const ver = remote.server().minecraftVersion;
     optifine.validateJar(jar, ver);
-    const { javaExe } = await prepare(signal, progress);
+    const { javaExe } = await prepare(signal, progress); cleanup();
     progress.setPhase('optifine', 'Ejecutando el instalador oficial de OptiFine…');
     const code = await optifine.runInstaller({ javaExe, jar, root: paths.root() });
     const list = optifine.installed(paths.game(), ver);
@@ -162,4 +173,4 @@ function optifineInstall(emit, jar) {
   });
 }
 
-module.exports = { play, update, cancel, installState, packInstall, packRepair, packToggle, packPriority, cleanTemp, optifineInfo, optifineInstall, setVersion, refreshRemote, ramFor, isRunning: () => !!child, isBusy: () => !!current, withTask };
+module.exports = { optiCtx, cleanup, play, update, cancel, installState, packInstall, packRepair, packToggle, packPriority, cleanTemp, optifineInfo, optifineInstall, setVersion, refreshRemote, ramFor, isRunning: () => !!child, isBusy: () => !!current, withTask };
