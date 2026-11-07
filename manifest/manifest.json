@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-07T00:14:03.079Z",
+  "generatedAt": "2026-11-07T05:23:46.099Z",
   "server": {
     "name": "AetheriaRPG",
     "address": "localhost",
@@ -12,12 +12,6 @@
     "website": "https://lovely-phoenix-2200be.netlify.app"
   },
   "newsUrl": "https://raw.githubusercontent.com/aetheria908-cmd/launcher1.21.1/main/news/news.json",
-  "auth": {
-    "microsoftClientId": "",
-    "discordClientId": "",
-    "discordGuildId": "",
-    "discordTokenExchangeUrl": ""
-  },
   "maintenance": {
     "enabled": false,
     "message": ""
@@ -31,83 +25,7 @@
     "defaultVideo": "",
     "defaultMusic": ""
   },
-  "resourcepacks": [
-    {
-      "id": "aetheria",
-      "name": "Aetheria",
-      "description": "Intro, decoración medieval y moneda",
-      "file": "Aetheria_ResourcePack.aep",
-      "url": "https://raw.githubusercontent.com/aetheria908-cmd/launcher1.21.1/main/resources/resourcepacks/required/Aetheria_ResourcePack.aep",
-      "sha256": "748b0815301e3df1db885f7c04c004d81976ec5173b2adef1cc89c71fa232a81",
-      "size": 2694998,
-      "category": "required",
-      "encrypted": true,
-      "packFile": "Aetheria_ResourcePack.zip",
-      "plainSha256": "a1a9636627f1f561f7e70c7475ac9ee7313a4b1a91b6cd2f752858d3240ff461",
-      "requiresOptifine": false,
-      "packFormat": 34,
-      "version": "1.0.0",
-      "updatedAt": "2026-11-07",
-      "priority": 0,
-      "history": [
-        {
-          "version": "1.0.0",
-          "sha256": "a1a9636627f1f561f7e70c7475ac9ee7313a4b1a91b6cd2f752858d3240ff461",
-          "date": "2026-11-07"
-        }
-      ]
-    },
-    {
-      "id": "gremios-gui",
-      "name": "Gremios GUI",
-      "description": "Menús de gremios y asedios",
-      "file": "GremiosGUI-ResourcePack.aep",
-      "url": "https://raw.githubusercontent.com/aetheria908-cmd/launcher1.21.1/main/resources/resourcepacks/required/GremiosGUI-ResourcePack.aep",
-      "sha256": "8598c53f1a3f0cabc1fee127764b9c46040acbadaa6454f25493df4dd4a295db",
-      "size": 2961627,
-      "category": "required",
-      "encrypted": true,
-      "packFile": "GremiosGUI-ResourcePack.zip",
-      "plainSha256": "464de4ee72e71cf0fe4e426c850a6afaabd1caf62dded4239a820208937cc6a3",
-      "requiresOptifine": false,
-      "packFormat": 34,
-      "version": "1.0.0",
-      "updatedAt": "2026-11-07",
-      "priority": 5,
-      "history": [
-        {
-          "version": "1.0.0",
-          "sha256": "464de4ee72e71cf0fe4e426c850a6afaabd1caf62dded4239a820208937cc6a3",
-          "date": "2026-11-07"
-        }
-      ]
-    },
-    {
-      "id": "razas-rpg",
-      "name": "Razas RPG",
-      "description": "Razas, objetos, GUI y animaciones (requiere OptiFine)",
-      "file": "RAZAS_RPG_resourcepack.aep",
-      "url": "https://github.com/aetheria908-cmd/launcher1.21.1/releases/download/resources/RAZAS_RPG_resourcepack.aep",
-      "sha256": "7ff97465095a313d49607eeb49889edae92c1ac4d9b4fefbb7a8e0b78007e558",
-      "size": 27282480,
-      "category": "required",
-      "encrypted": true,
-      "packFile": "RAZAS_RPG_resourcepack.zip",
-      "plainSha256": "36c667a2fef3e022071de559df09ed528beeba2110b70891b55d306594e62e5c",
-      "requiresOptifine": true,
-      "packFormat": 34,
-      "version": "1.0.0",
-      "updatedAt": "2026-11-07",
-      "priority": 10,
-      "history": [
-        {
-          "version": "1.0.0",
-          "sha256": "36c667a2fef3e022071de559df09ed528beeba2110b70891b55d306594e62e5c",
-          "date": "2026-11-07"
-        }
-      ]
-    }
-  ],
+  "resourcepacks": [],
   "media": {
     "music": [],
     "videos": [],
